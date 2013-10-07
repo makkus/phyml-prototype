@@ -8,5 +8,15 @@
     <artifactId>phyml-grid-prototype</artifactId>
     <version>0.1-SNAPSHOT</version>
 
-    
+    <properties>
+        <grid-jcommons.version>2.10</grid-jcommons.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>grisu</groupId>
+            <artifactId>grid-jcommons</artifactId>
+            <version>${grid-jcommons.version}</version>
+        </dependency>
+    </dependencies>
 </project>

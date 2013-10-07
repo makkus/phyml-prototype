@@ -12,6 +12,10 @@ I've set up a job on our CI Jenkins instance, the latest executable jar can be d
 
 https://code.ceres.auckland.ac.nz/jenkins/job/Phyml-Prototype/
 
+Checking out code
+---------------------
+
+    git clone https://github.com/makkus/phyml-prototype.git
 
 Importing into Eclipse
 -------------------------------

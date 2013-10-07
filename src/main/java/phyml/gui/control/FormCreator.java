@@ -11,7 +11,6 @@ import phyml.gui.view.RadioButtonProperty;
 import phyml.gui.view.TextFieldProperty;
 
 import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 
@@ -62,24 +61,6 @@ public class FormCreator {
 
         final FormCreator fc = new FormCreator(nodes);
 
-        try {
-            SwingUtilities.invokeAndWait(new Thread() {
-                public void run() {
-                    JFrame frame = new JFrame("InputForm");
-                    frame.setSize(600, 400);
-                    frame.setContentPane(fc.getForm());
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //        frame.pack();
-                    frame.setVisible(true);
-                }
-            });
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-
     }
 
     private final Collection<AbstractNode> nodes;
@@ -88,6 +69,22 @@ public class FormCreator {
 
     public FormCreator(Collection<AbstractNode> nodes) {
         this.nodes = nodes;
+        try {
+            SwingUtilities.invokeAndWait(new Thread() {
+                public void run() {
+                    JFrame frame = new JFrame("InputForm");
+                    frame.setSize(600, 400);
+                    frame.setContentPane(getForm());
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    //        frame.pack();
+                    frame.setVisible(true);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+
     }
 
     public InputFormPanel getForm() {

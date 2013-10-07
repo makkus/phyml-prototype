@@ -31,5 +31,5 @@ Building outside of IDE
 Running gui
 -----------
 
-    java -cp target/phyml-prototype-binary.jar
+    java -jar target/phyml-prototype-binary.jar
 

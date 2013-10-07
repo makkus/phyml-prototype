@@ -18,14 +18,16 @@ public class ExampleNode2 extends AbstractNode {
     @Override
     public void connectedNodeChanged(AbstractNode node, AbstractProperty property, PropertyChangeEvent event) {
 
+        AbstractProperty radioButton21 = getProperty("label21");
         AbstractProperty radioButton22 = getProperty("label22");
 
         if ( "node3".equals(node.getName()) &&
                 "label3".equals(property.getLabel()) &&
                 "choice3".equals(property.getValue()) ) {
-
+            radioButton21.setValue("button1");
             radioButton22.setActive(false);
             myLogger.debug("Disabled property: "+property.getLabel());
+
         } else {
             radioButton22.setActive(true);
             myLogger.debug("Enabled property: "+property.getLabel());

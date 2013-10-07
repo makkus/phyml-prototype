@@ -3,6 +3,8 @@ package phyml.gui.model;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -19,6 +21,7 @@ import java.util.Map;
  */
 public abstract class AbstractNode implements PropertyChangeListener {
 
+    protected static final Logger myLogger = LoggerFactory.getLogger(AbstractNode.class);
 
     protected final String name;
     final private Map<String, AbstractProperty> properties = Maps.newLinkedHashMap();

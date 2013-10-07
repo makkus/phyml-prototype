@@ -25,8 +25,10 @@ public class ExampleNode2 extends AbstractNode {
                 "choice3".equals(property.getValue()) ) {
 
             radioButton22.setActive(false);
+            myLogger.debug("Disabled property: "+property.getLabel());
         } else {
             radioButton22.setActive(true);
+            myLogger.debug("Enabled property: "+property.getLabel());
         }
 
 

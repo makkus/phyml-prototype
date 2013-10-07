@@ -1,11 +1,14 @@
 package phyml.gui.model;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A class extending AbstractProperty is a value a user can change via the UI.
@@ -16,13 +19,14 @@ import java.beans.PropertyChangeEvent;
  * Date: 2/10/13
  * Time: 4:38 PM
  */
-public abstract class AbstractProperty<T> {
+public abstract class AbstractProperty {
 
     private static final Logger myLogger = LoggerFactory.getLogger(AbstractProperty.class);
     protected final String label;
     private final AbstractNode parent;
-    private T value;
+    private String value;
     private boolean active = true;
+    private final Map<String, String> options = Maps.newHashMap();
 
     public AbstractProperty(AbstractNode parent, String label) {
         this.label = label;
@@ -36,13 +40,25 @@ public abstract class AbstractProperty<T> {
 
     abstract public JComponent getComponent();
 
+    abstract protected void reInitialize();
+
     abstract protected void lockUI(boolean lock);
 
-    public T getValue() {
+    public String getValue() {
         return value;
     }
 
-    abstract public void setValue(T value);
+    public void selectValue(final String value) {
+        SwingUtilities.invokeLater(new Thread() {
+            public void run() {
+                setValue(value);
+            }
+        });
+    }
+
+    abstract protected void setValue(String value);
+
+    abstract public Set<String> getOptionKeys();
 
     public int hashCode() {
         return Objects.hashCode(getLabel());
@@ -74,11 +90,28 @@ public abstract class AbstractProperty<T> {
 
     }
 
+    public void setOption(String key, String value) {
+        if ( ! getOptionKeys().contains(key) ) {
+            throw new RuntimeException("Can't set key '"+key+"' for property: "+this.getClass().getName());
+        }
+        options.put(key, value);
+
+        SwingUtilities.invokeLater(new Thread() {
+            public void run() {
+                reInitialize();
+            }
+        });
+    }
+
     public String getLabel() {
         return label;
     }
 
-    protected void valueChanged(T oldValue, T newValue) {
+    public String getOption(String key) {
+        return options.get(key);
+    }
+
+    protected void valueChanged(String oldValue, String newValue) {
 
         this.value = newValue;
 

@@ -18,7 +18,13 @@ public class ExampleNode extends AbstractNode {
     @Override
     public void connectedNodeChanged(AbstractNode node, AbstractProperty property, PropertyChangeEvent event) {
 
-        System.out.println("Node '"+name+"': Property of connected node changed ("+node.toString()+"/"+property.toString()+")");
+        AbstractProperty prop = getProperty("label1");
+
+        if ( "JTT".equals(event.getNewValue()) ) {
+            prop.setActive(false);
+        } else {
+            prop.setActive(true);
+        }
 
     }
 

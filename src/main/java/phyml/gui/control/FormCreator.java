@@ -1,10 +1,7 @@
 package phyml.gui.control;
 
 import com.google.common.collect.Lists;
-import phyml.gui.model.AbstractNode;
-import phyml.gui.model.AbstractProperty;
-import phyml.gui.model.ExampleNode;
-import phyml.gui.model.ExampleNode2;
+import phyml.gui.model.*;
 import phyml.gui.view.ComboBoxProperty;
 import phyml.gui.view.InputFormPanel;
 import phyml.gui.view.RadioButtonProperty;
@@ -31,26 +28,33 @@ public class FormCreator {
         // create node1
         AbstractNode node1 = new ExampleNode("node1");
         // adding property for node1 and setting default value
-        AbstractProperty<String> prop1 = new TextFieldProperty<String>(node1, "label1");
-        prop1.setValue("exampleDefaultValue");
+        AbstractProperty prop1 = new TextFieldProperty(node1, "label1");
+        prop1.selectValue("exampleDefaultValue");
 
         //creating node2
         AbstractNode node2 = new ExampleNode2("node2");
         // creating 2 properties and setting default value for node 2
-        AbstractProperty<String> prop21 = new RadioButtonProperty<String>(node2, "label21", "button1", "button2");
-        prop21.setValue("button2");
-        AbstractProperty<String> prop22 = new RadioButtonProperty<String>(node2, "label22", "button3", "button4");
-        prop22.setValue("button3");
+        AbstractProperty prop21 = new RadioButtonProperty(node2, "label21");
+        prop21.setOption(RadioButtonProperty.OPTION_1, "button1");
+        prop21.setOption(RadioButtonProperty.OPTION_2, "button2");
+        prop21.selectValue("button2");
+        AbstractProperty prop22 = new RadioButtonProperty(node2, "label22");
+        prop22.setOption(RadioButtonProperty.OPTION_1, "button3");
+        prop22.setOption(RadioButtonProperty.OPTION_2, "button4");
+        prop22.selectValue("button3");
 
         // creating node 3
-        AbstractNode node3 = new ExampleNode("node3");
+        AbstractNode node3 = new ExampleNode3("node3");
         // creating property for node 3
-        String[] choices = new String[]{"choice1", "choice2", "choice3"};
-        AbstractProperty<String> prop3 = new ComboBoxProperty<String>(node3, "label3", choices);
+        String choices = "Dayhoff;LG;WAG;JTT";
+        AbstractProperty prop3 = new ComboBoxProperty(node3, "label3");
+        prop3.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
 
         // setting connections
+        // node1 will react when node3 changes
+        node3.addConnection(node1);
+        // node 3 will react when node2 changes
         node2.addConnection(node3);
-        node3.addConnection(node2);
 
         // adding all nodes to list for creation
         List<AbstractNode> nodes = Lists.newArrayList();

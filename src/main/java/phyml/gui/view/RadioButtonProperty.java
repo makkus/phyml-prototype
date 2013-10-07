@@ -1,14 +1,16 @@
 package phyml.gui.view;
 
-import phyml.gui.model.AbstractNode;
-import phyml.gui.model.AbstractProperty;
+import com.google.common.collect.ImmutableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phyml.gui.model.AbstractNode;
+import phyml.gui.model.AbstractProperty;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Set;
 
 /**
  * Project: grisu
@@ -17,24 +19,22 @@ import java.awt.event.ItemListener;
  * Date: 4/10/13
  * Time: 5:20 PM
  */
-public class RadioButtonProperty<T> extends AbstractProperty<T> {
+public class RadioButtonProperty extends AbstractProperty {
+
+    public static final String OPTION_1 = "OPTION_1";
+    public static final String OPTION_2 = "OPTION_2";
+    public static final Set<String> OPTION_KEYS = ImmutableSet.<String>of(OPTION_1, OPTION_2);
 
     private static final Logger myLogger = LoggerFactory.getLogger(RadioButtonProperty.class);
 
     private JRadioButton button1;
     private JRadioButton button2;
 
-    private final String button1Name;
-    private final String button2Name;
-
-
     private ButtonGroup group;
     private final JPanel panel = new JPanel(new GridLayout(1,0));
 
-    public RadioButtonProperty(AbstractNode parent, String label, String button1Name, String button2Name) {
+    public RadioButtonProperty(AbstractNode parent, String label) {
         super(parent, label);
-        this.button1Name = button1Name;
-        this.button2Name = button2Name;
         getGroup();
         panel.add(getButton1());
         panel.add(getButton2());
@@ -52,12 +52,12 @@ public class RadioButtonProperty<T> extends AbstractProperty<T> {
 
     private JRadioButton getButton1() {
         if ( button1 == null ) {
-            button1 = new JRadioButton(button1Name);
+            button1 = new JRadioButton("n/a");
             button1.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
                     if ( ItemEvent.SELECTED == e.getStateChange() ) {
-                        valueChanged((T)button2Name, (T)button1Name);
+                        valueChanged(button2.getText(), button1.getText());
                     }
                 }
             });
@@ -67,12 +67,12 @@ public class RadioButtonProperty<T> extends AbstractProperty<T> {
 
         private JRadioButton getButton2() {
             if ( button2 == null ) {
-                button2 = new JRadioButton(button2Name);
+                button2 = new JRadioButton("n/a");
                 button2.addItemListener(new ItemListener() {
                     @Override
                     public void itemStateChanged(ItemEvent e) {
                         if ( ItemEvent.SELECTED == e.getStateChange() ) {
-                            valueChanged((T)button1Name, (T)button2Name);
+                            valueChanged(button1.getText(), button2.getText());
                         }
                     }
                 });
@@ -86,25 +86,37 @@ public class RadioButtonProperty<T> extends AbstractProperty<T> {
     }
 
     @Override
+    protected void reInitialize() {
+        getButton1().setText(getOption(OPTION_1));
+        getButton2().setText(getOption(OPTION_2));
+    }
+
+    @Override
     protected void lockUI(boolean lock) {
         getButton1().setEnabled(!lock);
         getButton2().setEnabled(!lock);
     }
 
     @Override
-    public void setValue(T value) {
+    public void setValue(String value) {
 
-        if ( value instanceof String ) {
-            if ( button1Name.equalsIgnoreCase((String)value) ) {
+//        if ( value instanceof String ) {
+
+            if ( getButton1().getText().equalsIgnoreCase((String) value) ) {
                 getButton1().setSelected(true);
-            } else if ( button2Name.equalsIgnoreCase((String)value)) {
+            } else if ( getButton2().getText().equalsIgnoreCase((String) value)) {
                 getButton2().setSelected(true);
             } else {
-                myLogger.error("Not a valid value for RadioButton, must be either '{}' or '{}': {}", new Object[]{button1Name, button2Name, value});
+                myLogger.error("Not a valid value for RadioButton, must be either '{}' or '{}': {}", new Object[]{getButton1().getText(), getButton2().getText(), value});
             }
-        } else {
-            myLogger.error("Wrong type, need String to change value of RadioButton: {}", value);
-        }
+//        } else {
+//            myLogger.error("Wrong type, need String to change value of RadioButton: {}", value);
+//        }
+    }
+
+    @Override
+    public Set<String> getOptionKeys() {
+        return OPTION_KEYS;
     }
 
 

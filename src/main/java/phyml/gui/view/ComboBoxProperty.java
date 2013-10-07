@@ -1,11 +1,13 @@
 package phyml.gui.view;
 
+import com.google.common.collect.ImmutableSortedSet;
 import phyml.gui.model.AbstractNode;
 import phyml.gui.model.AbstractProperty;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Set;
 
 /**
  * Project: grisu
@@ -14,21 +16,18 @@ import java.awt.event.ItemListener;
  * Date: 4/10/13
  * Time: 5:43 PM
  */
-public class ComboBoxProperty<T> extends AbstractProperty<T> {
+public class ComboBoxProperty extends AbstractProperty {
 
-    private final T[] choices;
+    public static final String OPTION_CHOICES = "CHOICES";
+    public static final Set<String> OPTION_KEYS = ImmutableSortedSet.<String>of(OPTION_CHOICES);
 
-    private T currentValue = null;
+    private String currentValue = null;
 
     private JComboBox comboBox;
     private DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
 
-    public ComboBoxProperty(AbstractNode parent, String label, T[] choices) {
+    public ComboBoxProperty(AbstractNode parent, String label) {
         super(parent, label);
-        this.choices = choices;
-        for ( T choice : choices ) {
-            comboBoxModel.addElement(choice);
-        }
     }
 
     @Override
@@ -37,13 +36,29 @@ public class ComboBoxProperty<T> extends AbstractProperty<T> {
     }
 
     @Override
+    protected void reInitialize() {
+
+        comboBoxModel.removeAllElements();
+
+        for ( String option : getOption(OPTION_CHOICES).split(";")) {
+            comboBoxModel.addElement(option);
+        }
+
+    }
+
+    @Override
     protected void lockUI(boolean lock) {
         getComboBox().setEnabled(!lock);
     }
 
     @Override
-    public void setValue(T value) {
+    public void setValue(String value) {
         comboBoxModel.setSelectedItem(value);
+    }
+
+    @Override
+    public Set<String> getOptionKeys() {
+        return OPTION_KEYS;
     }
 
     private JComboBox getComboBox() {
@@ -57,13 +72,13 @@ public class ComboBoxProperty<T> extends AbstractProperty<T> {
                         return;
                     }
 
-                    T old = currentValue;
-                    currentValue = (T)comboBoxModel.getSelectedItem();
+                    String old = currentValue;
+                    currentValue = (String)comboBoxModel.getSelectedItem();
 
                     valueChanged(old, currentValue);
                 }
             });
-            currentValue = (T)comboBoxModel.getSelectedItem();
+            currentValue = (String)comboBoxModel.getSelectedItem();
         }
         return comboBox;
     }

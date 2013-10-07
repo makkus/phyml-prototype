@@ -1,13 +1,15 @@
 package phyml.gui.view;
 
-import phyml.gui.model.AbstractNode;
-import phyml.gui.model.AbstractProperty;
+import com.google.common.collect.ImmutableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phyml.gui.model.AbstractNode;
+import phyml.gui.model.AbstractProperty;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Set;
 
 /**
  * Project: grisu
@@ -16,7 +18,10 @@ import java.awt.event.KeyEvent;
  * Date: 4/10/13
  * Time: 3:25 PM
  */
-public class TextFieldProperty<T> extends AbstractProperty<T> {
+public class TextFieldProperty extends AbstractProperty {
+
+    public static final String OPTION_TEXT = "TEXT";
+    public static final Set<String> OPTION_KEYS = ImmutableSet.<String>of(OPTION_TEXT);
 
     private static final Logger myLogger = LoggerFactory.getLogger(TextFieldProperty.class);
 
@@ -31,6 +36,13 @@ public class TextFieldProperty<T> extends AbstractProperty<T> {
     @Override
     public JComponent getComponent() {
         return getTextField();
+    }
+
+    @Override
+    protected void reInitialize() {
+        String text = getOption(OPTION_TEXT);
+
+        getTextField().setText(text);
     }
 
     @Override
@@ -49,7 +61,7 @@ public class TextFieldProperty<T> extends AbstractProperty<T> {
                 public void keyReleased(KeyEvent e) {
                     String old = currentText;
                     currentText = textField.getText();
-                    valueChanged((T)old, (T)currentText);
+                    valueChanged(old, currentText);
                 }
 
             });
@@ -58,15 +70,20 @@ public class TextFieldProperty<T> extends AbstractProperty<T> {
     }
 
     @Override
-    public void setValue(T value) {
-        if ( value instanceof String ) {
+    public void setValue(String value) {
+//        if ( value instanceof String ) {
             getTextField().setText((String)value);
             String old = currentText;
             currentText = (String)value;
-            valueChanged((T)old, value);
-        } else {
-            myLogger.error("Need value of type String for TextField: {}", value);
-        }
+            valueChanged(old, value);
+//        } else {
+//            myLogger.error("Need value of type String for TextField: {}", value);
+//        }
+    }
+
+    @Override
+    public Set<String> getOptionKeys() {
+        return OPTION_KEYS;
     }
 
     public Object getUserInput() {

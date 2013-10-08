@@ -47,7 +47,7 @@ public class TextFieldProperty extends AbstractProperty {
 
     @Override
     protected void lockUI(boolean lock) {
-        textField.setEnabled(!lock);
+        getTextField().setEnabled(!lock);
     }
 
     public JTextField getTextField() {

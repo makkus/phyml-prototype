@@ -62,7 +62,7 @@ public class FormCreator {
             System.exit(2);
         }
 
-        FormCreator fc = new FormCreator(controller);
+        FormCreator fc = new FormCreator(controller, FormCreator.COLLAPSIBLE_LAYOUT);
 
         fc.display();
 
@@ -74,7 +74,8 @@ public class FormCreator {
                 public void run() {
                     JFrame frame = new JFrame("InputForm");
                     frame.setSize(600, 400);
-                    frame.setContentPane(getForm().getPanel());
+                    JScrollPane scrollPane = new JScrollPane(getForm().getPanel());
+                    frame.setContentPane(scrollPane);
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     //        frame.pack();
                     frame.setVisible(true);

@@ -25,6 +25,8 @@ public class FormCreator {
 
     public static void main(String[] args) {
 
+        Boolean state = false;
+
         // create node1
         AbstractNode node1 = new ExampleNode("node1");
         // adding property for node1 and setting default value
@@ -53,25 +55,25 @@ public class FormCreator {
 
 
 
-        //creating node2
+        //Data type
         AbstractNode nodeDataType = new DataType("Data type node");
         AbstractProperty propDataType = new RadioButtonProperty(nodeDataType, "Data type");
         propDataType.setOption(RadioButtonProperty.OPTION_1, "Amino-acids");
         propDataType.setOption(RadioButtonProperty.OPTION_2, "Nucleotides");
         propDataType.selectValue("Nucleotides");
 
-
+        // Substitution model
         AbstractNode nodeSubstModels = new SubstModels("Substitution models node");
         String choicesSubstModels = "Dayhoff;LG;WAG;JTT";
         AbstractProperty propSubstModels = new ComboBoxProperty(nodeSubstModels, "Substitution models");
         propSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES, choicesSubstModels);
         propSubstModels.selectValue("LG");
-
-
+        
+        // Transition/transversion ratio
         AbstractNode nodeTsTv = new TsTv("TsTv node");
         AbstractProperty propTsTvVal = new TextFieldProperty(nodeTsTv, "Ts/tv value");
         propTsTvVal.selectValue("4.0");
-        Boolean state = false;
+        state = false;
         propTsTvVal.setActive(state);
         AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeTsTv, "Estimated/fixed");
         propTsTvYesNo.setOption(RadioButtonProperty.OPTION_1, "estimated");
@@ -79,8 +81,30 @@ public class FormCreator {
         propTsTvYesNo.selectValue("estimated");
 
 
+        // Number of rate classes
+        AbstractNode nodeRateClasses = new RateClasses("Rate classes node");
+        AbstractProperty propRateClasses = new TextFieldProperty(nodeRateClasses, "Number of rate classes");
+        propRateClasses.selectValue("4");
 
+        // RAS model
+        AbstractNode nodeRASmodel = new TsTv("RAS model node");
+        AbstractProperty propRASmodel = new RadioButtonProperty(nodeRASmodel, "Rate variation model");
+        propRASmodel.setOption(RadioButtonProperty.OPTION_1, "Discrete Gamma");
+        propRASmodel.setOption(RadioButtonProperty.OPTION_2, "Free Rates");
+        propRASmodel.selectValue("Free Rates");
 
+        // Discrete Gamma model
+        AbstractNode nodeGamma = new Gamma("Discrete Gamma node");
+        AbstractProperty propGamma = new TextFieldProperty(nodeGamma, "Gamma shape parameter");
+        propGamma.selectValue("1.0");
+        state = false;
+        propGamma.setActive(state);
+        AbstractProperty propGammaYesNo = new RadioButtonProperty(nodeGamma, "Estimated/fixed");
+        propGammaYesNo.setOption(RadioButtonProperty.OPTION_1, "estimated");
+        propGammaYesNo.setOption(RadioButtonProperty.OPTION_2, "fixed");
+        propGammaYesNo.selectValue("estimated");
+        state = false;
+        propGammaYesNo.setActive(state);
 
 
 
@@ -98,6 +122,8 @@ public class FormCreator {
         nodeDataType.addConnection(nodeTsTv);
         nodeTsTv.addConnection(nodeTsTv);
         nodeSubstModels.addConnection(nodeTsTv);
+        nodeRASmodel.addConnection(nodeGamma);
+        nodeGamma.addConnection(nodeGamma);
 
 
         // adding all nodes to list for creation
@@ -108,6 +134,9 @@ public class FormCreator {
         nodes.add(nodeDataType);
         nodes.add(nodeSubstModels);
         nodes.add(nodeTsTv);
+        nodes.add(nodeRateClasses);
+        nodes.add(nodeRASmodel);
+        nodes.add(nodeGamma);
 
         final FormCreator fc = new FormCreator(nodes);
 

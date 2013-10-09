@@ -38,6 +38,7 @@ public class TsTv extends AbstractNode
                     {
                         Boolean state = true;
                         currTsTvYesNo.setActive(state);
+                        currTsTvYesNo.setValue("estimated");
                         
                         state = false;
                         currTsTvVal.setActive(state);
@@ -67,6 +68,7 @@ public class TsTv extends AbstractNode
                     {
                         Boolean state = true;
                         currTsTvYesNo.setActive(state);
+                        currTsTvYesNo.setValue("estimated");
                     }
                 else
                     {

@@ -81,13 +81,10 @@ public class FormCreator {
         propTsTvYesNo.selectValue("estimated");
 
 
-        // Number of rate classes
-        AbstractNode nodeRateClasses = new RateClasses("Rate classes node");
-        AbstractProperty propRateClasses = new TextFieldProperty(nodeRateClasses, "Number of rate classes");
-        propRateClasses.selectValue("4");
-
         // RAS model
         AbstractNode nodeRASmodel = new TsTv("RAS model node");
+        AbstractProperty propRASnclasses = new TextFieldProperty(nodeRASmodel, "Number of rate classes");
+        propRASnclasses.selectValue("4");
         AbstractProperty propRASmodel = new RadioButtonProperty(nodeRASmodel, "Rate variation model");
         propRASmodel.setOption(RadioButtonProperty.OPTION_1, "Discrete Gamma");
         propRASmodel.setOption(RadioButtonProperty.OPTION_2, "Free Rates");
@@ -126,6 +123,7 @@ public class FormCreator {
         nodeGamma.addConnection(nodeGamma);
 
 
+
         // adding all nodes to list for creation
         List<AbstractNode> nodes = Lists.newArrayList();
         nodes.add(node1);
@@ -134,7 +132,6 @@ public class FormCreator {
         nodes.add(nodeDataType);
         nodes.add(nodeSubstModels);
         nodes.add(nodeTsTv);
-        nodes.add(nodeRateClasses);
         nodes.add(nodeRASmodel);
         nodes.add(nodeGamma);
 

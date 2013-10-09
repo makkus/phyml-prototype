@@ -16,7 +16,6 @@ import java.beans.PropertyChangeEvent;
 public class RateClasses extends AbstractNode 
 {
 
-
     public RateClasses(String name) {
         super(name);
     }

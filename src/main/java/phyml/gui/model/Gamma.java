@@ -15,8 +15,6 @@ import java.beans.PropertyChangeEvent;
 
 public class Gamma extends AbstractNode 
 {
-
-
     public Gamma(String name) {
         super(name);
     }
@@ -30,11 +28,26 @@ public class Gamma extends AbstractNode
             {
                 if("Discrete Gamma".equals(property.getValue())) 
                     {
-                        Boolean state = true;
-                        currGammaYesNo.setActive(state);
-                        currGammaYesNo.selectValue("estimated");
-                        state = false;
-                        currGammaVal.setActive(state);
+
+                        AbstractProperty currNclasses = node.getProperty("Number of rate classes");
+
+                       if("1".equals(currNclasses.getValue()))
+                           {
+                               Boolean state = false;
+                               currGammaYesNo.setActive(state);
+                               currGammaYesNo.selectValue("estimated");
+                               currGammaVal.setActive(state);
+                           }
+                       else
+                           {
+                               Boolean state = true;
+                               currGammaYesNo.setActive(state);
+                               currGammaYesNo.selectValue("estimated");
+                               state = false;
+                               currGammaVal.setActive(state);
+                           }
+
+
                     }
                 else if("Free Rates".equals(property.getValue())) 
                     {
@@ -42,6 +55,38 @@ public class Gamma extends AbstractNode
                         currGammaVal.setActive(state);
                         currGammaYesNo.setActive(state);
                     }
+
+                if("Number of rate classes".equals(property.getLabel()))
+                    { 
+                        if("1".equals(property.getValue()))
+                            {
+                                Boolean state = false;
+                                currGammaYesNo.setActive(state);
+                                currGammaVal.setActive(state);
+                            }
+                        else
+                            {
+
+                                AbstractProperty currRASmodel = node.getProperty("Rate variation model");
+                                
+                                if("Discrete Gamma".equals(currRASmodel.getValue()))
+                                    {
+                                        Boolean state = true;
+                                        currGammaYesNo.setActive(state);
+                                        
+                                        if("fixed".equals(currGammaYesNo.getValue()))
+                                            {
+                                                currGammaVal.setActive(state);
+                                            }
+                                        else
+                                            {
+                                                state = false;
+                                                currGammaVal.setActive(state);
+                                            }
+                                    }
+                            }
+                    }
+
             }
 
         if("Discrete Gamma node".equals(node.getName()))
@@ -57,6 +102,5 @@ public class Gamma extends AbstractNode
                         currGammaVal.setActive(state);
                     }
             }
-
     }
 }

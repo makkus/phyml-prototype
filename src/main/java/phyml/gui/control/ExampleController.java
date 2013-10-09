@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import phyml.gui.model.AbstractProperty;
 import phyml.gui.model.Node;
 import phyml.gui.view.ComboBoxProperty;
+import phyml.gui.view.FilePathProperty;
 import phyml.gui.view.RadioButtonProperty;
 import phyml.gui.view.TextFieldProperty;
 
@@ -47,6 +48,7 @@ public class ExampleController extends NodeController {
     public static final String PROPERTY_2 = "label2";
     public static final String PROPERTY_3 = "label3";
     public static final String PROPERTY_4 = "label4";
+    public static final String PROPERTY_5 = "label5";
 
 
     @Override
@@ -61,22 +63,22 @@ public class ExampleController extends NodeController {
         //creating node2
         Node node2 = new Node(NODE_2);
         // creating 2 properties and setting default value for node 2
-        AbstractProperty prop21 = new RadioButtonProperty(node2, PROPERTY_2);
-        prop21.setOption(RadioButtonProperty.OPTION_1, "button1");
-        prop21.setOption(RadioButtonProperty.OPTION_2, "button2");
-        prop21.selectValue("button2");
-        AbstractProperty prop22 = new RadioButtonProperty(node2, PROPERTY_3);
-        prop22.setOption(RadioButtonProperty.OPTION_1, "button3");
-        prop22.setOption(RadioButtonProperty.OPTION_2, "button4");
-        prop22.selectValue("button3");
+        AbstractProperty prop2 = new RadioButtonProperty(node2, PROPERTY_2);
+        prop2.setOption(RadioButtonProperty.OPTION_1, "button1");
+        prop2.setOption(RadioButtonProperty.OPTION_2, "button2");
+        prop2.selectValue("button2");
+        AbstractProperty prop3 = new RadioButtonProperty(node2, PROPERTY_3);
+        prop3.setOption(RadioButtonProperty.OPTION_1, "button3");
+        prop3.setOption(RadioButtonProperty.OPTION_2, "button4");
+        prop3.selectValue("button3");
 
         // creating node 3
         Node node3 = new Node(NODE_3);
         // creating property for node 3
         String choices = "Dayhoff;LG;WAG;JTT";
-        AbstractProperty prop3 = new ComboBoxProperty(node3, PROPERTY_4);
-        prop3.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
-
+        AbstractProperty prop4 = new ComboBoxProperty(node3, PROPERTY_4);
+        prop4.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
+        AbstractProperty prop5 = new FilePathProperty(node3, PROPERTY_5);
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();

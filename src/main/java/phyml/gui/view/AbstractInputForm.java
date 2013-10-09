@@ -1,7 +1,9 @@
 package phyml.gui.view;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
 import phyml.gui.model.AbstractProperty;
 import phyml.gui.model.Node;
 
@@ -41,17 +43,9 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         };
 //
         FormLayout layout = new FormLayout(cs,rs);
-
-        PanelBuilder builder = new PanelBuilder(layout);
-
         panel.setLayout(layout);
 
-        CellConstraints cc = new CellConstraints();
-
-//        JLabel label = new JLabel(p.getLabel());
-//        panel.add(label);
-
-        panel.add(new JLabel(p.getLabel()), "2, 2, fill, fill");
+        panel.add(new JLabel(p.getLabel()), "2, 2");
         panel.add(p.getComponent(), "4, 2");
 //        panel.add(p.getComponent());
 

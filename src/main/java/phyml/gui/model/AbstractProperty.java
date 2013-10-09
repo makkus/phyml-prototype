@@ -78,7 +78,7 @@ public abstract class AbstractProperty {
         return false;
     }
 
-    synchronized void setActive(final boolean active) {
+    public void setActive(final boolean active) {
 
         this.active = active;
 

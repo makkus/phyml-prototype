@@ -50,18 +50,64 @@ public class FormCreator {
         AbstractProperty prop3 = new ComboBoxProperty(node3, "label3");
         prop3.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
 
+
+
+
+        //creating node2
+        AbstractNode nodeDataType = new DataType("Data type node");
+        AbstractProperty propDataType = new RadioButtonProperty(nodeDataType, "Data type");
+        propDataType.setOption(RadioButtonProperty.OPTION_1, "Amino-acids");
+        propDataType.setOption(RadioButtonProperty.OPTION_2, "Nucleotides");
+        propDataType.selectValue("Nucleotides");
+
+
+        AbstractNode nodeSubstModels = new SubstModels("Substitution models node");
+        String choicesSubstModels = "Dayhoff;LG;WAG;JTT";
+        AbstractProperty propSubstModels = new ComboBoxProperty(nodeSubstModels, "Substitution models");
+        propSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES, choicesSubstModels);
+        propSubstModels.selectValue("LG");
+
+
+        AbstractNode nodeTsTv = new TsTv("TsTv node");
+        AbstractProperty propTsTvVal = new TextFieldProperty(nodeTsTv, "Ts/tv value");
+        propTsTvVal.selectValue("4.0");
+        Boolean state = false;
+        propTsTvVal.setActive(state);
+        AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeTsTv, "Estimated/fixed");
+        propTsTvYesNo.setOption(RadioButtonProperty.OPTION_1, "estimated");
+        propTsTvYesNo.setOption(RadioButtonProperty.OPTION_2, "fixed");
+        propTsTvYesNo.selectValue("estimated");
+
+
+
+
+
+
+
+
+
+
+
+
         // setting connections
         // node1 will react when node3 changes
         node3.addConnection(node1);
         // node 3 will react when node2 changes
         node2.addConnection(node3);
+        nodeDataType.addConnection(nodeSubstModels);
+        nodeDataType.addConnection(nodeTsTv);
+        nodeTsTv.addConnection(nodeTsTv);
+        nodeSubstModels.addConnection(nodeTsTv);
+
 
         // adding all nodes to list for creation
         List<AbstractNode> nodes = Lists.newArrayList();
         nodes.add(node1);
         nodes.add(node2);
         nodes.add(node3);
-
+        nodes.add(nodeDataType);
+        nodes.add(nodeSubstModels);
+        nodes.add(nodeTsTv);
 
         final FormCreator fc = new FormCreator(nodes);
 

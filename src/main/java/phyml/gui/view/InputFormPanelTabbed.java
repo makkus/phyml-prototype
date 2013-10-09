@@ -1,6 +1,6 @@
 package phyml.gui.view;
 
-import phyml.gui.model.AbstractNode;
+import phyml.gui.model.Node;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +25,7 @@ public class InputFormPanelTabbed extends AbstractInputForm {
 
 
     @Override
-    public void addNode(AbstractNode node) {
+    public void addNode(Node node) {
 
         String name = node.getName();
         JPanel temp = assembleNodeForm(node);

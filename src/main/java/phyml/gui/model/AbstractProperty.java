@@ -23,18 +23,18 @@ public abstract class AbstractProperty {
 
     private static final Logger myLogger = LoggerFactory.getLogger(AbstractProperty.class);
     protected final String label;
-    private final AbstractNode parent;
+    private final Node parent;
     private String value;
     private boolean active = true;
     private final Map<String, String> options = Maps.newHashMap();
 
-    public AbstractProperty(AbstractNode parent, String label) {
+    public AbstractProperty(Node parent, String label) {
         this.label = label;
         this.parent = parent;
         this.parent.addProperty(this);
     }
 
-    public AbstractNode getParentNode() {
+    public Node getParentNode() {
         return parent;
     }
 
@@ -46,6 +46,7 @@ public abstract class AbstractProperty {
 
     /**
      * Returns the currently set value of this property.
+     *
      * @return the value (as a String)
      */
     public String getValue() {
@@ -54,9 +55,9 @@ public abstract class AbstractProperty {
 
     /**
      * Enables the setting of a value for a property pragmatically. Make sure to only set 'valid' values.
-     *
+     * <p/>
      * This might trigger other values to be set down the line of connections of nodes.
-     *
+     * <p/>
      * * @param value the value to set the property to
      */
     public void selectValue(final String value) {
@@ -115,12 +116,12 @@ public abstract class AbstractProperty {
      * Sets an option for this property. This will be reflected in the UI (e.g. different choices for comboboxes,
      * or different lables for radio buttons.
      *
-     * @param key the key of the option (use {@link #getOptionKeys()} to get a list of valid options)
+     * @param key   the key of the option (use {@link #getOptionKeys()} to get a list of valid options)
      * @param value the value for the option
      */
     public void setOption(String key, String value) {
-        if ( ! getOptionKeys().contains(key) ) {
-            throw new RuntimeException("Can't set key '"+key+"' for property: "+this.getClass().getName());
+        if (!getOptionKeys().contains(key)) {
+            throw new RuntimeException("Can't set key '" + key + "' for property: " + this.getClass().getName());
         }
         options.put(key, value);
 

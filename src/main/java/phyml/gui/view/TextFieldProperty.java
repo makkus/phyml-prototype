@@ -3,8 +3,8 @@ package phyml.gui.view;
 import com.google.common.collect.ImmutableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phyml.gui.model.AbstractNode;
 import phyml.gui.model.AbstractProperty;
+import phyml.gui.model.Node;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
@@ -29,7 +29,7 @@ public class TextFieldProperty extends AbstractProperty {
 
     private String currentText = "";
 
-    public TextFieldProperty(AbstractNode parent, String label){
+    public TextFieldProperty(Node parent, String label) {
         super(parent, label);
     }
 
@@ -51,7 +51,7 @@ public class TextFieldProperty extends AbstractProperty {
     }
 
     public JTextField getTextField() {
-        if ( textField == null ) {
+        if (textField == null) {
             textField = new JTextField();
             textField.setColumns(10);
             textField.addKeyListener(new KeyAdapter() {
@@ -72,10 +72,10 @@ public class TextFieldProperty extends AbstractProperty {
     @Override
     public void setValue(String value) {
 //        if ( value instanceof String ) {
-            getTextField().setText((String)value);
-            String old = currentText;
-            currentText = (String)value;
-            valueChanged(old, value);
+        getTextField().setText((String) value);
+        String old = currentText;
+        currentText = (String) value;
+        valueChanged(old, value);
 //        } else {
 //            myLogger.error("Need value of type String for TextField: {}", value);
 //        }
@@ -89,7 +89,6 @@ public class TextFieldProperty extends AbstractProperty {
     public Object getUserInput() {
         return textField.getText();
     }
-
 
 
 }

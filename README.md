@@ -35,5 +35,9 @@ Building outside of IDE
 Running gui
 -----------
 
-    java -jar target/phyml-prototype-binary.jar
+    java -jar target/phyml-prototype-binary.jar <ControllerClassName>
+
+for example:
+
+    java -jar target/phyml-prototype-binary.jar ExampleController
 

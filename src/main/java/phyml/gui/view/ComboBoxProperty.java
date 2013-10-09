@@ -1,8 +1,8 @@
 package phyml.gui.view;
 
 import com.google.common.collect.ImmutableSortedSet;
-import phyml.gui.model.AbstractNode;
 import phyml.gui.model.AbstractProperty;
+import phyml.gui.model.Node;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
@@ -26,7 +26,7 @@ public class ComboBoxProperty extends AbstractProperty {
     private JComboBox comboBox;
     private DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
 
-    public ComboBoxProperty(AbstractNode parent, String label) {
+    public ComboBoxProperty(Node parent, String label) {
         super(parent, label);
     }
 
@@ -40,7 +40,7 @@ public class ComboBoxProperty extends AbstractProperty {
 
         comboBoxModel.removeAllElements();
 
-        for ( String option : getOption(OPTION_CHOICES).split(";")) {
+        for (String option : getOption(OPTION_CHOICES).split(";")) {
             comboBoxModel.addElement(option);
         }
 
@@ -62,23 +62,23 @@ public class ComboBoxProperty extends AbstractProperty {
     }
 
     private JComboBox getComboBox() {
-        if ( comboBox == null ) {
+        if (comboBox == null) {
             comboBox = new JComboBox(comboBoxModel);
             comboBox.setEditable(false);
             comboBox.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if ( ItemEvent.DESELECTED == e.getStateChange() ) {
+                    if (ItemEvent.DESELECTED == e.getStateChange()) {
                         return;
                     }
 
                     String old = currentValue;
-                    currentValue = (String)comboBoxModel.getSelectedItem();
+                    currentValue = (String) comboBoxModel.getSelectedItem();
 
                     valueChanged(old, currentValue);
                 }
             });
-            currentValue = (String)comboBoxModel.getSelectedItem();
+            currentValue = (String) comboBoxModel.getSelectedItem();
         }
         return comboBox;
     }

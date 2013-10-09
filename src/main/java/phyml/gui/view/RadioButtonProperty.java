@@ -3,8 +3,8 @@ package phyml.gui.view;
 import com.google.common.collect.ImmutableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phyml.gui.model.AbstractNode;
 import phyml.gui.model.AbstractProperty;
+import phyml.gui.model.Node;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,9 +31,9 @@ public class RadioButtonProperty extends AbstractProperty {
     private JRadioButton button2;
 
     private ButtonGroup group;
-    private final JPanel panel = new JPanel(new GridLayout(1,0));
+    private final JPanel panel = new JPanel(new GridLayout(1, 0));
 
-    public RadioButtonProperty(AbstractNode parent, String label) {
+    public RadioButtonProperty(Node parent, String label) {
         super(parent, label);
         getGroup();
         panel.add(getButton1());
@@ -42,7 +42,7 @@ public class RadioButtonProperty extends AbstractProperty {
     }
 
     private ButtonGroup getGroup() {
-        if ( group == null ) {
+        if (group == null) {
             group = new ButtonGroup();
             group.add(getButton1());
             group.add(getButton2());
@@ -51,12 +51,12 @@ public class RadioButtonProperty extends AbstractProperty {
     }
 
     private JRadioButton getButton1() {
-        if ( button1 == null ) {
+        if (button1 == null) {
             button1 = new JRadioButton("n/a");
             button1.addItemListener(new ItemListener() {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
-                    if ( ItemEvent.SELECTED == e.getStateChange() ) {
+                    if (ItemEvent.SELECTED == e.getStateChange()) {
                         valueChanged(button2.getText(), button1.getText());
                     }
                 }
@@ -65,20 +65,20 @@ public class RadioButtonProperty extends AbstractProperty {
         return button1;
     }
 
-        private JRadioButton getButton2() {
-            if ( button2 == null ) {
-                button2 = new JRadioButton("n/a");
-                button2.addItemListener(new ItemListener() {
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        if ( ItemEvent.SELECTED == e.getStateChange() ) {
-                            valueChanged(button1.getText(), button2.getText());
-                        }
+    private JRadioButton getButton2() {
+        if (button2 == null) {
+            button2 = new JRadioButton("n/a");
+            button2.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    if (ItemEvent.SELECTED == e.getStateChange()) {
+                        valueChanged(button1.getText(), button2.getText());
                     }
-                });
-            }
-            return button2;
+                }
+            });
         }
+        return button2;
+    }
 
     @Override
     public JComponent getComponent() {
@@ -102,13 +102,13 @@ public class RadioButtonProperty extends AbstractProperty {
 
 //        if ( value instanceof String ) {
 
-            if ( getButton1().getText().equalsIgnoreCase((String) value) ) {
-                getButton1().setSelected(true);
-            } else if ( getButton2().getText().equalsIgnoreCase((String) value)) {
-                getButton2().setSelected(true);
-            } else {
-                myLogger.error("Not a valid value for RadioButton, must be either '{}' or '{}': {}", new Object[]{getButton1().getText(), getButton2().getText(), value});
-            }
+        if (getButton1().getText().equalsIgnoreCase((String) value)) {
+            getButton1().setSelected(true);
+        } else if (getButton2().getText().equalsIgnoreCase((String) value)) {
+            getButton2().setSelected(true);
+        } else {
+            myLogger.error("Not a valid value for RadioButton, must be either '{}' or '{}': {}", new Object[]{getButton1().getText(), getButton2().getText(), value});
+        }
 //        } else {
 //            myLogger.error("Wrong type, need String to change value of RadioButton: {}", value);
 //        }

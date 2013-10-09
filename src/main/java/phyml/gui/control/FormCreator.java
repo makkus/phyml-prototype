@@ -1,12 +1,12 @@
 package phyml.gui.control;
 
-import com.google.common.collect.Lists;
-import phyml.gui.model.*;
-import phyml.gui.view.*;
+import phyml.gui.model.Node;
+import phyml.gui.view.InputFormPanel;
+import phyml.gui.view.InputFormPanelCollapsible;
+import phyml.gui.view.InputFormPanelSimple;
+import phyml.gui.view.InputFormPanelTabbed;
 
 import javax.swing.*;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * This class assembles the Form according to the node list.
@@ -20,56 +20,55 @@ import java.util.List;
  */
 public class FormCreator {
 
+    public static final int SIMPLE_LAYOUT = 1;
+    public static final int TABBED_LAYOUT = 2;
+    public static final int COLLAPSIBLE_LAYOUT = 3;
+    private final NodeController controller;
+    private final int layout;
+    private InputFormPanel inputFormPanel;
+    public FormCreator(NodeController nc, int layout) {
+        this.controller = nc;
+        this.layout = layout;
+    }
+
+    public FormCreator(NodeController nc) {
+        this(nc, COLLAPSIBLE_LAYOUT);
+    }
+
     public static void main(String[] args) {
 
-        // create node1
-        AbstractNode node1 = new ExampleNode("node1");
-        // adding property for node1 and setting default value
-        AbstractProperty prop1 = new TextFieldProperty(node1, "label1");
-        prop1.selectValue("exampleDefaultValue");
+        if ( args.length != 1 ) {
+            System.err.println("Wrong number of arguments. Only name of controller class is allowed.");
+            System.exit(1);
+        }
 
-        //creating node2
-        AbstractNode node2 = new ExampleNode2("node2");
-        // creating 2 properties and setting default value for node 2
-        AbstractProperty prop21 = new RadioButtonProperty(node2, "label21");
-        prop21.setOption(RadioButtonProperty.OPTION_1, "button1");
-        prop21.setOption(RadioButtonProperty.OPTION_2, "button2");
-        prop21.selectValue("button2");
-        AbstractProperty prop22 = new RadioButtonProperty(node2, "label22");
-        prop22.setOption(RadioButtonProperty.OPTION_1, "button3");
-        prop22.setOption(RadioButtonProperty.OPTION_2, "button4");
-        prop22.selectValue("button3");
+        String controllerClass = args[0];
 
-        // creating node 3
-        AbstractNode node3 = new ExampleNode3("node3");
-        // creating property for node 3
-        String choices = "Dayhoff;LG;WAG;JTT";
-        AbstractProperty prop3 = new ComboBoxProperty(node3, "label3");
-        prop3.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
+        NodeController controller = null;
 
-        // setting connections
-        // node1 will react when node3 changes
-        node3.addConnection(node1);
-        // node 3 will react when node2 changes
-        node2.addConnection(node3);
+        ClassLoader classLoader = FormCreator.class.getClassLoader();
+        try {
+            Class aClass;
+            try {
+                aClass = classLoader.loadClass(controllerClass);
+            } catch (ClassNotFoundException e) {
+                aClass = classLoader.loadClass("phyml.gui.control."+controllerClass);
+            }
 
-        // adding all nodes to list for creation
-        List<AbstractNode> nodes = Lists.newArrayList();
-        nodes.add(node1);
-        nodes.add(node2);
-        nodes.add(node3);
+            controller = (NodeController) aClass.newInstance();
 
+        } catch (Exception e) {
+            System.err.println("Error creating controller class: "+e.getLocalizedMessage());
+            System.exit(2);
+        }
 
-        final FormCreator fc = new FormCreator(nodes);
+        FormCreator fc = new FormCreator(controller);
+
+        fc.display();
 
     }
 
-    private final Collection<AbstractNode> nodes;
-
-    private InputFormPanel inputFormPanel;
-
-    public FormCreator(Collection<AbstractNode> nodes) {
-        this.nodes = nodes;
+    public void display() {
         try {
             SwingUtilities.invokeAndWait(new Thread() {
                 public void run() {
@@ -84,17 +83,23 @@ public class FormCreator {
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-
-
     }
 
     public InputFormPanel getForm() {
 
-        if ( inputFormPanel == null ) {
-            //inputFormPanel = new InputFormPanelSimple();
-            //inputFormPanel = new InputFormPanelTabbed();
-            inputFormPanel = new InputFormPanelCollapsible();
-            for ( AbstractNode n : nodes ) {
+        if (inputFormPanel == null) {
+            switch (layout) {
+                case SIMPLE_LAYOUT:
+                    inputFormPanel = new InputFormPanelSimple();
+                    break;
+                case TABBED_LAYOUT:
+                    inputFormPanel = new InputFormPanelTabbed();
+                    break;
+                default:
+                    inputFormPanel = new InputFormPanelCollapsible();
+            }
+
+            for (Node n : controller.getNodes()) {
                 inputFormPanel.addNode(n);
             }
         }
@@ -102,7 +107,7 @@ public class FormCreator {
         return inputFormPanel;
     }
 
-    private JPanel assembleFormField(AbstractNode node) {
+    private JPanel assembleFormField(Node node) {
         return null;
     }
 

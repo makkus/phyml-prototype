@@ -1,6 +1,6 @@
 package phyml.gui.view;
 
-import phyml.gui.model.AbstractNode;
+import phyml.gui.model.Node;
 
 import javax.swing.*;
 
@@ -19,7 +19,7 @@ public class InputFormPanelSimple extends AbstractInputForm {
     }
 
     @Override
-    public void addNode(AbstractNode node) {
+    public void addNode(Node node) {
 
         add(new JLabel(node.getName()));
         JPanel temp = assembleNodeForm(node);

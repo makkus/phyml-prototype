@@ -1,8 +1,8 @@
 package phyml.gui.view;
 
 import org.jdesktop.swingx.HorizontalLayout;
-import phyml.gui.model.AbstractNode;
 import phyml.gui.model.AbstractProperty;
+import phyml.gui.model.Node;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,8 +19,8 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
     private static JPanel assemblePropertyForm(AbstractProperty p) {
 
         JPanel panel = new JPanel();
-        panel.setMinimumSize(new Dimension(400,32));
-        panel.setMaximumSize(new Dimension(400,32));
+        panel.setMinimumSize(new Dimension(400, 32));
+        panel.setMaximumSize(new Dimension(400, 32));
         //panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setLayout(new HorizontalLayout());
         JLabel label = new JLabel(p.getLabel());
@@ -31,11 +31,11 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         return panel;
     }
 
-    protected static JPanel assembleNodeForm(AbstractNode node) {
+    protected static JPanel assembleNodeForm(Node node) {
         JPanel panel = new JPanel();
 //        panel.setLayout(new VerticalLayout());
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        for ( String name : node.getProperties().keySet() ) {
+        for (String name : node.getProperties().keySet()) {
             JPanel temp = assemblePropertyForm(node.getProperties().get(name));
             panel.add(temp);
         }
@@ -50,7 +50,6 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
     public JPanel getPanel() {
         return this;
     }
-
 
 
 }

@@ -1,6 +1,6 @@
 package phyml.gui.view;
 
-import phyml.gui.model.AbstractNode;
+import phyml.gui.model.Node;
 
 import javax.swing.*;
 
@@ -13,6 +13,7 @@ import javax.swing.*;
  */
 public interface InputFormPanel {
 
-    public void addNode(AbstractNode node);
+    public void addNode(Node node);
+
     public JPanel getPanel();
 }

@@ -1,32 +1,31 @@
 package phyml.gui.model;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phyml.gui.control.NodeController;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.List;
 import java.util.Map;
 
 /**
  * An AbstractNode object can contain {@link AbstractProperty}s, as well as connections to other AbstractNodes.
  * <p/>
- *
+ * <p/>
  * Written by: Markus Binsteiner
  * Date: 2/10/13
  * Time: 4:37 PM
  */
-public abstract class AbstractNode implements PropertyChangeListener {
+public class Node {
 
-    protected static final Logger myLogger = LoggerFactory.getLogger(AbstractNode.class);
+    protected static final Logger myLogger = LoggerFactory.getLogger(Node.class);
 
     protected final String name;
     final private Map<String, AbstractProperty> properties = Maps.newLinkedHashMap();
-    private List<AbstractNode> connections = Lists.newLinkedList();
-    public AbstractNode(String name) {
+    private NodeController controller;
+
+    public Node(String name) {
         this.name = name;
     }
 
@@ -44,23 +43,15 @@ public abstract class AbstractNode implements PropertyChangeListener {
         if (obj == null) return false;
 
         if (obj instanceof AbstractProperty) {
-            final AbstractNode other = (AbstractNode) obj;
+            final Node other = (Node) obj;
             return Objects.equal(getName(), other.getName());
         }
 
         return false;
     }
 
-    public List<AbstractNode> getConnections() {
-        return connections;
-    }
-
     public void addProperty(AbstractProperty prop) {
         properties.put(prop.getLabel(), prop);
-    }
-
-    public void addConnection(AbstractNode connection) {
-        connections.add(connection);
     }
 
     public AbstractProperty getProperty(String label) {
@@ -72,20 +63,15 @@ public abstract class AbstractNode implements PropertyChangeListener {
     }
 
     public void valueChanged(PropertyChangeEvent evt) {
-        for ( AbstractNode con : connections ) {
-            con.propertyChange(evt);
-        }
+        AbstractProperty property = (AbstractProperty) evt.getSource();
+        controller.nodeChanged(property.getParentNode(), property, evt);
     }
 
     public String toString() {
         return getName();
     }
 
-    public void propertyChange(PropertyChangeEvent evt) {
-        AbstractProperty property = (AbstractProperty) evt.getSource();
-        connectedNodeChanged(property.getParentNode(), property, evt);
+    public void setController(NodeController nodeController) {
+        this.controller = nodeController;
     }
-
-    abstract public void connectedNodeChanged(AbstractNode node, AbstractProperty property, PropertyChangeEvent event);
-
 }

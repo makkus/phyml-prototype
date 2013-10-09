@@ -2,10 +2,7 @@ package phyml.gui.control;
 
 import com.google.common.collect.Lists;
 import phyml.gui.model.*;
-import phyml.gui.view.ComboBoxProperty;
-import phyml.gui.view.InputFormPanel;
-import phyml.gui.view.RadioButtonProperty;
-import phyml.gui.view.TextFieldProperty;
+import phyml.gui.view.*;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -78,7 +75,7 @@ public class FormCreator {
                 public void run() {
                     JFrame frame = new JFrame("InputForm");
                     frame.setSize(600, 400);
-                    frame.setContentPane(getForm());
+                    frame.setContentPane(getForm().getPanel());
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     //        frame.pack();
                     frame.setVisible(true);
@@ -94,7 +91,9 @@ public class FormCreator {
     public InputFormPanel getForm() {
 
         if ( inputFormPanel == null ) {
-            inputFormPanel = new InputFormPanel();
+            //inputFormPanel = new InputFormPanelSimple();
+            //inputFormPanel = new InputFormPanelTabbed();
+            inputFormPanel = new InputFormPanelCollapsible();
             for ( AbstractNode n : nodes ) {
                 inputFormPanel.addNode(n);
             }

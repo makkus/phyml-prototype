@@ -10,7 +10,7 @@ import java.awt.event.ItemListener;
 import java.util.Set;
 
 /**
- * Project: grisu
+ * Property that displays several pre-set options to the user via a combobox.
  * <p/>
  * Written by: Markus Binsteiner
  * Date: 4/10/13

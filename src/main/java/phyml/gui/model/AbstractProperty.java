@@ -44,10 +44,21 @@ public abstract class AbstractProperty {
 
     abstract protected void lockUI(boolean lock);
 
+    /**
+     * Returns the currently set value of this property.
+     * @return the value (as a String)
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Enables the setting of a value for a property pragmatically. Make sure to only set 'valid' values.
+     *
+     * This might trigger other values to be set down the line of connections of nodes.
+     *
+     * * @param value the value to set the property to
+     */
     public void selectValue(final String value) {
         SwingUtilities.invokeLater(new Thread() {
             public void run() {
@@ -58,6 +69,11 @@ public abstract class AbstractProperty {
 
     abstract protected void setValue(String value);
 
+    /**
+     * Returns all 'valid' keys for options that can be set for this property.
+     *
+     * @return the keys
+     */
     abstract public Set<String> getOptionKeys();
 
     public int hashCode() {
@@ -78,7 +94,12 @@ public abstract class AbstractProperty {
         return false;
     }
 
-    synchronized void setActive(final boolean active) {
+    /**
+     * Sets the current property either active or inactive.
+     *
+     * @param active whether to activate or de-activate this property
+     */
+    synchronized public void setActive(final boolean active) {
 
         this.active = active;
 
@@ -90,6 +111,13 @@ public abstract class AbstractProperty {
 
     }
 
+    /**
+     * Sets an option for this property. This will be reflected in the UI (e.g. different choices for comboboxes,
+     * or different lables for radio buttons.
+     *
+     * @param key the key of the option (use {@link #getOptionKeys()} to get a list of valid options)
+     * @param value the value for the option
+     */
     public void setOption(String key, String value) {
         if ( ! getOptionKeys().contains(key) ) {
             throw new RuntimeException("Can't set key '"+key+"' for property: "+this.getClass().getName());
@@ -103,11 +131,22 @@ public abstract class AbstractProperty {
         });
     }
 
+    /**
+     * The label for this property. This needs to be unique across the whole application.
+     *
+     * @return the label
+     */
     public String getLabel() {
         return label;
     }
 
-    public String getOption(String key) {
+    /**
+     * Returns the option that is currently set for this key.
+     *
+     * @param key the key
+     * @return the option value
+     */
+    protected String getOption(String key) {
         return options.get(key);
     }
 

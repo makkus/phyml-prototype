@@ -74,4 +74,8 @@ public class Node {
     public void setController(NodeController nodeController) {
         this.controller = nodeController;
     }
+
+    public NodeController getController() {
+        return controller;
+    }
 }

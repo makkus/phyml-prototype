@@ -75,7 +75,7 @@ public class Node {
         this.controller = nodeController;
     }
 
-    public NodeController getController() {
+    protected NodeController getController() {
         return controller;
     }
 }

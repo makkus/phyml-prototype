@@ -70,6 +70,13 @@ abstract public class NodeController {
     abstract public void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event);
 
     /**
+     * Calculates the commandline, using the current state of the model.
+     *
+     * @return the commanline tokens (an array is used 
+     */
+    abstract public String[] calculateCommandline();
+
+    /**
      * Returns the property with the specified label.
      *
      * @param label the label

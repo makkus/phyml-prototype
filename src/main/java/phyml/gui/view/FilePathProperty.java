@@ -79,6 +79,7 @@ public class FilePathProperty extends AbstractProperty {
     @Override
     protected void lockUI(boolean lock) {
         getTextField().setEnabled(!lock);
+        getBrowseButton().setEnabled(!lock);
     }
 
     public JTextField getTextField() {

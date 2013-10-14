@@ -62,7 +62,7 @@ abstract public class NodeController {
     final protected LinkedList<String> commandline = Lists.newLinkedList();
 
     public NodeController(){
-        this(true);
+        this(false);
     }
 
     public NodeController(boolean useSystemLookAndFeel) {

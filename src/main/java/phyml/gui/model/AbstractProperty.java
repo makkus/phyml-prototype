@@ -95,12 +95,7 @@ public abstract class AbstractProperty {
         return false;
     }
 
-    /**
-     * Sets the current property either active or inactive.
-     *
-     * @param active whether to activate or de-activate this property
-     */
-    synchronized public void setActive(final boolean active) {
+    public void setActive(final boolean active) {
 
         this.active = active;
 

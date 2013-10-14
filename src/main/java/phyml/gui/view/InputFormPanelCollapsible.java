@@ -18,6 +18,21 @@ import java.awt.event.ActionListener;
  */
 public class InputFormPanelCollapsible extends AbstractInputForm {
 
+    /** Returns an ImageIcon, or null if the path was invalid. */
+    protected static ImageIcon createImageIcon(String path,
+                                           String description) {
+    java.net.URL imgURL = InputFormPanelCollapsible.class.getResource(path);
+    if (imgURL != null) {
+        return new ImageIcon(imgURL, description);
+    } else {
+        System.err.println("Couldn't find file: " + path);
+        return null;
+    }
+}
+
+    public static final ImageIcon TOGGLE = createImageIcon("/toggle.png", "collapsed");
+    public static final ImageIcon TOGGLE_EXPAND = createImageIcon("/toggle_expand.png", "expanded");
+
 
     public InputFormPanelCollapsible() {
         super();
@@ -26,13 +41,16 @@ public class InputFormPanelCollapsible extends AbstractInputForm {
 
 
     @Override
-    public void addNode(Node node) {
+    public void addNode(final Node node) {
 
         String name = node.getName();
         JPanel temp = assembleNodeForm(node);
 
         final JXCollapsiblePane cp = new JXCollapsiblePane();
-        JButton collapse = new JButton(node.getName());
+        final JToggleButton collapse = new JToggleButton(node.getName(), TOGGLE);
+        collapse.setSelectedIcon(TOGGLE_EXPAND);
+        collapse.setHorizontalAlignment(SwingConstants.LEFT);
+        collapse.setSelected(true);
         collapse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

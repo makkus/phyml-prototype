@@ -1,5 +1,8 @@
 package phyml.gui.view;
 
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
@@ -8,6 +11,8 @@ import phyml.gui.model.AbstractProperty;
 import phyml.gui.model.Node;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import java.util.Collection;
 
 /**
  * Project: grisu
@@ -17,6 +22,10 @@ import javax.swing.*;
  * Time: 9:14 AM
  */
 public abstract class AbstractInputForm extends JPanel implements InputFormPanel {
+
+    public AbstractInputForm() {
+        super();
+    }
 
     private static JPanel assemblePropertyForm(AbstractProperty p) {
 
@@ -36,13 +45,13 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
                 ColumnSpec.decode("pref:grow"),
                 FormSpecs.RELATED_GAP_COLSPEC
         };
-        RowSpec[] rs = new RowSpec[] {
+        RowSpec[] rs = new RowSpec[]{
                 FormSpecs.RELATED_GAP_ROWSPEC,
                 RowSpec.decode("pref"),
                 FormSpecs.RELATED_GAP_ROWSPEC
         };
 //
-        FormLayout layout = new FormLayout(cs,rs);
+        FormLayout layout = new FormLayout(cs, rs);
         panel.setLayout(layout);
 
         panel.add(new JLabel(p.getLabel()), "2, 2");
@@ -52,26 +61,64 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         return panel;
     }
 
-
     protected static JPanel assembleNodeForm(Node node) {
+
+        Multimap<String, AbstractProperty> groups = getPropertyGroups(node.getProperties().values());
         JPanel panel = new JPanel();
-//        panel.setLayout(new VerticalLayout());
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        JSeparator sep = null;
-        for (String name : node.getProperties().keySet()) {
-            JPanel temp = assemblePropertyForm(node.getProperties().get(name));
-            panel.add(temp);
-            sep = new JSeparator();
-            panel.add(sep);
+
+        // dont split into groups if only one group exists
+        if (groups.keySet().size() == 0) {
+            throw new RuntimeException("No groups/properties, can't assemble node.");
+//        } else if (groups.keySet().size() == 1) {
+//
+//            // create the panel that contains all properties using BoxLayout
+//            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+//            JSeparator sep = null;
+//
+//            for (String name : node.getProperties().keySet()) {
+//                JPanel temp = assemblePropertyForm(node.getProperties().get(name));
+//                panel.add(temp);
+//                sep = new JSeparator();
+//                panel.add(sep);
+//            }
+//            // remove last separator
+//            panel.remove(sep);
+        } else {
+
+            // create the panel that contains all properties using BoxLayout
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+            for (String group : groups.keySet()) {
+
+                JPanel panel_tmp = new JPanel();
+                if ( ! AbstractProperty.DEFAULT_GROUP_NAME.equals(group) ) {
+                    panel_tmp.setBorder(new TitledBorder(group));
+                }
+                panel_tmp.setLayout(new BoxLayout(panel_tmp, BoxLayout.Y_AXIS));
+
+                for (AbstractProperty prop : groups.get(group)) {
+                    JPanel temp = assemblePropertyForm(prop);
+                    panel_tmp.add(temp);
+                }
+
+                panel.add(panel_tmp);
+
+            }
+
         }
-        // remove last separator
-        panel.remove(sep);
 
         return panel;
     }
 
-    public AbstractInputForm() {
-        super();
+    protected static Multimap<String, AbstractProperty> getPropertyGroups(Collection<AbstractProperty> properties) {
+
+        ListMultimap<String, AbstractProperty> groups = LinkedListMultimap.create();
+
+        for (AbstractProperty prop : properties) {
+            groups.put(prop.getGroup(), prop);
+        }
+
+        return groups;
     }
 
     @Override

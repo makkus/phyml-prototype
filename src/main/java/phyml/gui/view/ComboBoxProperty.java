@@ -27,7 +27,11 @@ public class ComboBoxProperty extends AbstractProperty {
     private DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
 
     public ComboBoxProperty(Node parent, String label) {
-        super(parent, label);
+        this(parent, label, null);
+    }
+
+    public ComboBoxProperty(Node parent, String label, String group) {
+        super(parent, label, group);
     }
 
     @Override

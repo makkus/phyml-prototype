@@ -2,6 +2,7 @@ package phyml.gui.model;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,8 @@ import java.util.Set;
  */
 public abstract class AbstractProperty {
 
+    public static final String DEFAULT_GROUP_NAME = "__default__";
+
     private static final Logger myLogger = LoggerFactory.getLogger(AbstractProperty.class);
     protected final String label;
     private final Node parent;
@@ -28,9 +31,16 @@ public abstract class AbstractProperty {
     private boolean active = true;
     private final Map<String, String> options = Maps.newHashMap();
 
-    public AbstractProperty(Node parent, String label) {
+    private final String group;
+
+    public AbstractProperty(Node parent, String label, String group) {
         this.label = label;
         this.parent = parent;
+        if (StringUtils.isBlank(group)) {
+            this.group = DEFAULT_GROUP_NAME;
+        } else {
+            this.group = group;
+        }
         this.parent.addProperty(this);
     }
 
@@ -163,4 +173,7 @@ public abstract class AbstractProperty {
         return getLabel();
     }
 
+    public String getGroup() {
+        return group;
+    }
 }

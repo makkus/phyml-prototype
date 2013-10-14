@@ -34,14 +34,17 @@ public class RadioButtonProperty extends AbstractProperty {
     private final JPanel panel = new JPanel(new GridLayout(1, 0));
 
     public RadioButtonProperty(Node parent, String label) {
-        super(parent, label);
-        getGroup();
+        this(parent, label, null);
+    }
+    public RadioButtonProperty(Node parent, String label, String group) {
+        super(parent, label, group);
+        getButtonGroup();
         panel.add(getButton1());
         panel.add(getButton2());
 
     }
 
-    private ButtonGroup getGroup() {
+    private ButtonGroup getButtonGroup() {
         if (group == null) {
             group = new ButtonGroup();
             group.add(getButton1());

@@ -8,6 +8,7 @@ import phyml.gui.model.AbstractProperty;
 import phyml.gui.model.Node;
 
 import java.beans.PropertyChangeEvent;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ abstract public class NodeController {
     /**
      * Holds the current commandline.
      */
-    final protected List<String> commandline = Lists.newLinkedList();
+    final protected LinkedList<String> commandline = Lists.newLinkedList();
 
     public NodeController() {
         this.nodes = initNodes();

@@ -46,6 +46,8 @@ public class PhyMLController extends NodeController {
     public static final String PROPERTY_1 = "label1";
     public static final String PROPERTY_2 = "label2";
     public static final String PROPERTY_3 = "label3";
+    public static final String PROPERTY_22 = "label22";
+    public static final String PROPERTY_32 = "label32";
     public static final String PROPERTY_4 = "label4";
     public static final String PROPERTY_5 = "label5";
 
@@ -64,14 +66,22 @@ public class PhyMLController extends NodeController {
         //creating node2
         Node node2 = new Node(NODE_2);
         // creating 2 properties and setting default value for node 2
-        AbstractProperty prop2 = new RadioButtonProperty(node2, PROPERTY_2);
+        AbstractProperty prop2 = new RadioButtonProperty(node2, PROPERTY_2, "testgroup");
         prop2.setOption(RadioButtonProperty.OPTION_1, "button1");
         prop2.setOption(RadioButtonProperty.OPTION_2, "button2");
         prop2.selectValue("button2");
-        AbstractProperty prop3 = new RadioButtonProperty(node2, PROPERTY_3);
+        AbstractProperty prop3 = new RadioButtonProperty(node2, PROPERTY_3, "testgroup");
         prop3.setOption(RadioButtonProperty.OPTION_1, "button3");
         prop3.setOption(RadioButtonProperty.OPTION_2, "button4");
         prop3.selectValue("button3");
+        AbstractProperty prop22 = new RadioButtonProperty(node2, PROPERTY_22, "testgroup2");
+        prop22.setOption(RadioButtonProperty.OPTION_1, "button12");
+        prop22.setOption(RadioButtonProperty.OPTION_2, "button22");
+        prop22.selectValue("button2");
+        AbstractProperty prop32 = new RadioButtonProperty(node2, PROPERTY_32, "testgroup2");
+        prop32.setOption(RadioButtonProperty.OPTION_1, "button32");
+        prop32.setOption(RadioButtonProperty.OPTION_2, "button42");
+        prop32.selectValue("button3");
 
         // creating node 3
         Node node3 = new Node(NODE_3);
@@ -167,7 +177,7 @@ public class PhyMLController extends NodeController {
         state = true;
         propRandomStarts.setActive(state);
 
-        
+
         //Optimize tree
         Node nodeOptTree = new Node("Optimize tree node");
         AbstractProperty propOptTree = new RadioButtonProperty(nodeOptTree, "Optimize tree");
@@ -199,7 +209,7 @@ public class PhyMLController extends NodeController {
         state = true;
         propFastSupport.setActive(state);
 
-        
+
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();
@@ -223,11 +233,11 @@ public class PhyMLController extends NodeController {
     }
 
     @Override
-    public void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event) 
+    public void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event)
     {
-        
+
         String labelThatChanged = property.getLabel();
-        
+
         // Input sequence file
         if("Source".equals(labelThatChanged))
             {
@@ -247,27 +257,27 @@ public class PhyMLController extends NodeController {
 
 
         // Substitution models
-        
+
         AbstractProperty currSubstModels = getProperty("Substitution models");
 
         if("Data type".equals(labelThatChanged))
             {
 
-                if ("Amino-acids".equals(property.getValue())) 
+                if ("Amino-acids".equals(property.getValue()))
                     {
                         String choicesSubstModelsAA = "Dayhoff;LG;WAG;JTT";
                         currSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES,choicesSubstModelsAA);
                         currSubstModels.selectValue("LG");
-                    } 
-                else 
+                    }
+                else
                     {
                         String choicesSubstModelsNT = "JC69;K80;F81;F84;HKY85;TN93;GTR";
                         currSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES,choicesSubstModelsNT);
                         currSubstModels.selectValue("HKY85");
                     }
             }
-        
-        
+
+
 
         // TsTv ratio
 
@@ -276,7 +286,7 @@ public class PhyMLController extends NodeController {
 
         if ("Data type".equals(labelThatChanged))
             {
-                if("Amino-acids".equals(property.getValue())) 
+                if("Amino-acids".equals(property.getValue()))
                     {
                         Boolean state = false;
                         currTsTvVal.setActive(state);
@@ -287,7 +297,7 @@ public class PhyMLController extends NodeController {
                         Boolean state = true;
                         currTsTvYesNo.setActive(state);
                         currTsTvYesNo.selectValue("estimated");
-                        
+
                         state = false;
                         currTsTvVal.setActive(state);
                     }
@@ -299,18 +309,18 @@ public class PhyMLController extends NodeController {
                 if("fixed".equals(property.getValue()))
                     {
                         Boolean state = true;
-                        currTsTvVal.setActive(state);                
+                        currTsTvVal.setActive(state);
                     }
                 else
                     {
                         Boolean state = false;
-                        currTsTvVal.setActive(state);                
+                        currTsTvVal.setActive(state);
                     }
             }
-        
+
         if("Substitution models".equals(labelThatChanged))
             {
-                if(("K80".equals(property.getValue()) || 
+                if(("K80".equals(property.getValue()) ||
                     "F84".equals(property.getValue())  ||
                     "HKY85".equals(property.getValue())  ||
                     "TN93".equals(property.getValue())))
@@ -322,12 +332,12 @@ public class PhyMLController extends NodeController {
                 else
                     {
                         Boolean state = false;
-                        currTsTvVal.setActive(state);                
+                        currTsTvVal.setActive(state);
                         currTsTvYesNo.setActive(state);
                     }
             }
-        
-        
+
+
 
         // Rate  across sites
         AbstractProperty currGammaVal   = getNode("Discrete Gamma node").getProperty("Gamma shape parameter");
@@ -335,7 +345,7 @@ public class PhyMLController extends NodeController {
 
         if("RAS model node".equals(node.getName()))
             {
-                if("Discrete Gamma".equals(property.getValue())) 
+                if("Discrete Gamma".equals(property.getValue()))
                     {
 
                         AbstractProperty currNclasses = node.getProperty("Number of rate classes");
@@ -356,7 +366,7 @@ public class PhyMLController extends NodeController {
                                 currGammaVal.setActive(state);
                             }
                     }
-                else if("Free Rates".equals(property.getValue())) 
+                else if("Free Rates".equals(property.getValue()))
                     {
                         Boolean state = false;
                         currGammaVal.setActive(state);
@@ -364,7 +374,7 @@ public class PhyMLController extends NodeController {
                     }
 
                 if("Number of rate classes".equals(property.getLabel()))
-                    { 
+                    {
                         if("1".equals(property.getValue()))
                             {
                                 Boolean state = false;
@@ -375,12 +385,12 @@ public class PhyMLController extends NodeController {
                             {
 
                                 AbstractProperty currRASmodel = node.getProperty("Rate variation model");
-                                
+
                                 if("Discrete Gamma".equals(currRASmodel.getValue()))
                                     {
                                         Boolean state = true;
                                         currGammaYesNo.setActive(state);
-                                        
+
                                         if("fixed".equals(currGammaYesNo.getValue()))
                                             {
                                                 currGammaVal.setActive(state);
@@ -398,7 +408,7 @@ public class PhyMLController extends NodeController {
 
         if("Discrete Gamma node".equals(node.getName()))
             {
-                if("estimated".equals(property.getValue())) 
+                if("estimated".equals(property.getValue()))
                     {
                         Boolean state = false;
                         currGammaVal.setActive(state);
@@ -410,19 +420,19 @@ public class PhyMLController extends NodeController {
                     }
             }
 
-        
+
         // Starting tree
         if("Starting tree node".equals(node.getName()) && "Source".equals(property.getLabel()))
             {
                 if("File".equals(property.getValue()))
                     {
                         Boolean state = true;
-                        getProperty("Starting tree").setActive(state);                        
+                        getProperty("Starting tree").setActive(state);
                     }
                 else
                     {
                         Boolean state = false;
-                        getProperty("Starting tree").setActive(state);                    
+                        getProperty("Starting tree").setActive(state);
                     }
             }
 
@@ -441,12 +451,12 @@ public class PhyMLController extends NodeController {
                     }
             }
 
-        
+
         // Edge support
         if("Edge support node".equals(node.getName()))
             {
                 if("Bootstrap".equals(property.getLabel()))
-                    {                        
+                    {
                         if("Yes".equals(property.getValue()))
                             {
                                 Boolean state = true;

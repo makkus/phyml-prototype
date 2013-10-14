@@ -37,7 +37,11 @@ public class FilePathProperty extends AbstractProperty {
     private JPanel panel;
 
     public FilePathProperty(Node parent, String label) {
-        super(parent, label);
+        this(parent, label, null);
+    }
+
+    public FilePathProperty(Node parent, String label, String group) {
+        super(parent, label, group);
 
         panel = new JPanel();
 

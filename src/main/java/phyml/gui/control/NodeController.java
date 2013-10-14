@@ -1,5 +1,6 @@
 package phyml.gui.control;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,11 @@ abstract public class NodeController {
     protected static final Logger myLogger = LoggerFactory.getLogger(NodeController.class);
 
     final private List<Node> nodes;
+
+    /**
+     * Holds the current commandline.
+     */
+    final protected List<String> commandline = Lists.newLinkedList();
 
     public NodeController() {
         this.nodes = initNodes();
@@ -68,13 +74,6 @@ abstract public class NodeController {
      * @param event    the propertyChangeEvent, containing old and new values and such
      */
     abstract public void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event);
-
-    /**
-     * Calculates the commandline, using the current state of the model.
-     *
-     * @return the commanline tokens (an array is used 
-     */
-    abstract public String[] calculateCommandline();
 
     /**
      * Returns the property with the specified label.

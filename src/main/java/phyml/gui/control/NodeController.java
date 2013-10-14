@@ -1,12 +1,16 @@
 package phyml.gui.control;
 
 import com.google.common.collect.Lists;
+import com.jgoodies.common.base.SystemUtils;
+import com.jgoodies.looks.Options;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phyml.gui.model.AbstractProperty;
 import phyml.gui.model.Node;
 
+import javax.swing.*;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +26,34 @@ abstract public class NodeController {
 
     protected static final Logger myLogger = LoggerFactory.getLogger(NodeController.class);
 
+
+    private static void setLookAndFeel() {
+        		try {
+			myLogger.debug("Setting look and feel.");
+
+			UIManager.put(Options.USE_SYSTEM_FONTS_APP_KEY, Boolean.TRUE);
+			Options.setDefaultIconSize(new Dimension(18, 18));
+
+			String lafName = null;
+			if (SystemUtils.IS_OS_WINDOWS) {
+				lafName = Options.JGOODIES_WINDOWS_NAME;
+			} else {
+				lafName = UIManager.getSystemLookAndFeelClassName();
+			}
+
+			try {
+				myLogger.debug("Look and feel name:" + lafName);
+				UIManager.setLookAndFeel(lafName);
+			} catch (Exception e) {
+				System.err.println("Can't set look & feel:" + e);
+			}
+
+			// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (final Exception e) {
+			myLogger.error(e.getLocalizedMessage(), e);
+		}
+    }
+
     final private List<Node> nodes;
 
     /**
@@ -29,7 +61,14 @@ abstract public class NodeController {
      */
     final protected LinkedList<String> commandline = Lists.newLinkedList();
 
-    public NodeController() {
+    public NodeController(){
+        this(true);
+    }
+
+    public NodeController(boolean useSystemLookAndFeel) {
+        if ( useSystemLookAndFeel ) {
+            setLookAndFeel();
+        }
         this.nodes = initNodes();
         for (Node node : this.nodes) {
             node.setController(this);

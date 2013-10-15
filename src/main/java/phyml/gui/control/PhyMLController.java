@@ -92,7 +92,7 @@ public class PhyMLController extends NodeController {
     }
 
     @Override
-    public void setInitialValues() {
+    protected void setInitialValues() {
 
         Boolean state = false;
 

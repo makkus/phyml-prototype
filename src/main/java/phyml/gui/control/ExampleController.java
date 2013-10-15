@@ -79,7 +79,7 @@ public class ExampleController extends NodeController {
     }
 
     @Override
-    public void setInitialValues() {
+    protected void setInitialValues() {
 
         prop1.selectValue("exampleDefaultValue");
 

@@ -76,19 +76,19 @@ abstract public class NodeController {
     }
 
     /**
-     * Returns the node with the specified name.
+     * Returns the node with the specified id.
      *
-     * @param name the name of the node
-     * @return the node or null if no node with the name exists
+     * @param id the id of the node
+     * @return the node or null if no node with the id exists
      */
-    public Node getNode(String name) {
+    public Node getNode(String id) {
 
-        if (StringUtils.isBlank(name)) {
+        if (StringUtils.isBlank(id)) {
             return null;
         }
 
         for (Node node : nodes) {
-            if (name.equalsIgnoreCase(node.getName())) {
+            if (id.equalsIgnoreCase(node.getId())) {
                 return node;
             }
         }
@@ -116,19 +116,19 @@ abstract public class NodeController {
     abstract public void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event);
 
     /**
-     * Returns the property with the specified label.
+     * Returns the property with the specified id.
      *
-     * @param label the label
-     * @return the property or null if no property with that label exists
+     * @param id the id
+     * @return the property or null if no property with that id exists
      */
-    public AbstractProperty getProperty(String label) {
+    public AbstractProperty getProperty(String id) {
 
-        if (StringUtils.isBlank(label)) {
+        if (StringUtils.isBlank(id)) {
             return null;
         }
         for (Node node : nodes) {
             for (AbstractProperty prop : node.getProperties().values()) {
-                if (label.equalsIgnoreCase(prop.getLabel())) {
+                if (id.equalsIgnoreCase(prop.getId())) {
                     return prop;
                 }
             }

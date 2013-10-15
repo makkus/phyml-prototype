@@ -22,10 +22,16 @@ public class Node {
     protected static final Logger myLogger = LoggerFactory.getLogger(Node.class);
 
     protected final String name;
+    protected final String id;
     final private Map<String, AbstractProperty> properties = Maps.newLinkedHashMap();
     private NodeController controller;
 
-    public Node(String name) {
+    public Node(String id) {
+        this(id, id);
+    }
+
+    public Node(String id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -33,8 +39,12 @@ public class Node {
         return name;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public int hashCode() {
-        return Objects.hashCode(getName());
+        return Objects.hashCode(getId());
     }
 
     public boolean equals(Object obj) {
@@ -44,7 +54,7 @@ public class Node {
 
         if (obj instanceof AbstractProperty) {
             final Node other = (Node) obj;
-            return Objects.equal(getName(), other.getName());
+            return Objects.equal(getId(), other.getId());
         }
 
         return false;

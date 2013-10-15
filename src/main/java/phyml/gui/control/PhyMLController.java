@@ -304,7 +304,7 @@ public class PhyMLController extends NodeController {
             }
 
 
-        if("TsTv node".equals(node.getName()) && "Estimated/fixed".equals(labelThatChanged))
+        if("TsTv node".equals(node.getId()) && "Estimated/fixed".equals(labelThatChanged))
             {
                 if("fixed".equals(property.getValue()))
                     {
@@ -343,7 +343,7 @@ public class PhyMLController extends NodeController {
         AbstractProperty currGammaVal   = getNode("Discrete Gamma node").getProperty("Gamma shape parameter");
         AbstractProperty currGammaYesNo = getNode("Discrete Gamma node").getProperty("Estimated/fixed");
 
-        if("RAS model node".equals(node.getName()))
+        if("RAS model node".equals(node.getId()))
             {
                 if("Discrete Gamma".equals(property.getValue()))
                     {
@@ -406,7 +406,7 @@ public class PhyMLController extends NodeController {
 
             }
 
-        if("Discrete Gamma node".equals(node.getName()))
+        if("Discrete Gamma node".equals(node.getId()))
             {
                 if("estimated".equals(property.getValue()))
                     {
@@ -422,7 +422,7 @@ public class PhyMLController extends NodeController {
 
 
         // Starting tree
-        if("Starting tree node".equals(node.getName()) && "Source".equals(property.getLabel()))
+        if("Starting tree node".equals(node.getId()) && "Source".equals(property.getLabel()))
             {
                 if("File".equals(property.getValue()))
                     {
@@ -453,7 +453,7 @@ public class PhyMLController extends NodeController {
 
 
         // Edge support
-        if("Edge support node".equals(node.getName()))
+        if("Edge support node".equals(node.getId()))
             {
                 if("Bootstrap".equals(property.getLabel()))
                     {

@@ -1,6 +1,7 @@
 package phyml.gui.control;
 
 import com.google.common.collect.Lists;
+import com.google.common.eventbus.EventBus;
 import com.jgoodies.common.base.SystemUtils;
 import com.jgoodies.looks.Options;
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +27,7 @@ abstract public class NodeController {
 
     protected static final Logger myLogger = LoggerFactory.getLogger(NodeController.class);
 
+    public static EventBus eventBus = new EventBus();
 
     private static void setLookAndFeel() {
         		try {
@@ -136,6 +138,7 @@ abstract public class NodeController {
         if ( nodesCreated ) {
             nodeChanged(node, property, event);
         }
+        eventBus.post(commandline);
     }
 
     /**

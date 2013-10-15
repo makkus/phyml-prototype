@@ -28,6 +28,8 @@ public class PhyMLController extends NodeController {
         // create the GUI
         FormCreator fc = new FormCreator(phymlController);
 
+//        fc.setDisplayDebug(true);
+
         // alternatively, you can use different layouts
         // FormCreator fc = new FormCreator(phymlController, FormCreator.SIMPLE_LAYOUT);
         // FormCreator fc = new FormCreator(phymlController, FormCreator.TABBED_LAYOUT);

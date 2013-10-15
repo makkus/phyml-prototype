@@ -39,22 +39,22 @@ public class PhyMLController extends NodeController {
 
     }
 
-    private final Node nodeAlignment = new Node("Alignment file node");
-    private final AbstractProperty propAlignment = new FilePathProperty(nodeAlignment, "Alignment file");
-    private final AbstractProperty propAlignmentYesNo = new RadioButtonProperty(nodeAlignment, "Source");
-    private final Node nodeDataType = new Node("Data type node");
-    private final AbstractProperty propDataType = new RadioButtonProperty(nodeDataType, "Data type");
-    private final Node nodeSubstModels = new Node("Substitution models node");
+    private final Node nodeInput = new Node("Input");
+    private final AbstractProperty propAlignment = new FilePathProperty(nodeInput, "Alignment file");
+    private final AbstractProperty propAlignmentYesNo = new RadioButtonProperty(nodeInput, "Source");
+    private final AbstractProperty propDataType = new RadioButtonProperty(nodeInput, "Data type");
+    private final AbstractProperty propFormat = new RadioButtonProperty(nodeInput, "Format");
+
+    private final Node nodeModel = new Node("Model");
     private final String choicesSubstModels = "Dayhoff;LG;WAG;JTT";
-    private final AbstractProperty propSubstModels = new ComboBoxProperty(nodeSubstModels, "Substitution models");
-    private final Node nodeTsTv = new Node("TsTv node");
-    private final AbstractProperty propTsTvVal = new TextFieldProperty(nodeTsTv, "Ts/tv value");
-    private final AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeTsTv, "Estimated/fixed");
-    private final Node nodeRASmodel = new Node("RAS model node");
-    private final AbstractProperty propRASnclasses = new TextFieldProperty(nodeRASmodel, "Number of rate classes");
-    private final AbstractProperty propRASmodel = new RadioButtonProperty(nodeRASmodel, "Rate variation model");
-    private final Node nodeGamma = new Node("Discrete Gamma node");
-    private final AbstractProperty propGamma = new TextFieldProperty(nodeGamma, "Gamma shape parameter");
+    private final AbstractProperty propSubstModels = new ComboBoxProperty(nodeModel, "Substitution models");
+    private final AbstractProperty propTsTvVal = new TextFieldProperty(nodeModel,"Ts/tv value");
+    private final AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeModel,"TsTvEstFix","Estimated/Fixed","__default__");
+    private final AbstractProperty propRASnclasses = new SpinnerProperty(nodeModel, "Number of rate classes");
+    private final AbstractProperty propRASmodel = new RadioButtonProperty(nodeModel, "Rate variation model");
+    private final AbstractProperty propGammaVal = new TextFieldProperty(nodeModel, "Gamma shape parameter");
+    private final AbstractProperty propGammaYesNo = new RadioButtonProperty(nodeModel,"GammaEstFix","Estimated/Fixed","__default__");
+
     private final Node nodeStartingTree = new Node("Starting tree node");
     private final AbstractProperty propStartingTree = new FilePathProperty(nodeStartingTree, "Starting tree");
     private final AbstractProperty propStartingTreeYesNo = new RadioButtonProperty(nodeStartingTree, "Source");
@@ -77,12 +77,8 @@ public class PhyMLController extends NodeController {
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();
-        nodes.add(nodeAlignment);
-        nodes.add(nodeDataType);
-        nodes.add(nodeSubstModels);
-        nodes.add(nodeTsTv);
-        nodes.add(nodeRASmodel);
-        nodes.add(nodeGamma);
+        nodes.add(nodeInput);
+        nodes.add(nodeModel);
         nodes.add(nodeStartingTree);
         nodes.add(nodeTreeSearch);
         nodes.add(nodeRandomStarts);
@@ -108,6 +104,12 @@ public class PhyMLController extends NodeController {
         propDataType.setOption(RadioButtonProperty.OPTION_2, "Nucleotides");
         propDataType.selectValue("Nucleotides");
 
+        System.out.println("propDataType:"+propDataType.getValue());
+
+        //Format
+        propFormat.setOption(RadioButtonProperty.OPTION_1, "Interleaved");
+        propFormat.setOption(RadioButtonProperty.OPTION_2, "Sequential");
+        propFormat.selectValue("Interleaved");
 
 
         // Substitution model
@@ -123,19 +125,24 @@ public class PhyMLController extends NodeController {
         propTsTvYesNo.setOption(RadioButtonProperty.OPTION_1, "estimated");
         propTsTvYesNo.setOption(RadioButtonProperty.OPTION_2, "fixed");
         propTsTvYesNo.selectValue("estimated");
+        state = true;
+        propTsTvYesNo.setActive(state);
 
 
         // RAS model
+        propRASnclasses.setOption(SpinnerProperty.OPTION_MIN, "1");
+        propRASnclasses.setOption(SpinnerProperty.OPTION_MAX, "10");
+        propRASnclasses.setOption(SpinnerProperty.OPTION_STEP, "1");
         propRASnclasses.selectValue("4");
+
         propRASmodel.setOption(RadioButtonProperty.OPTION_1, "Discrete Gamma");
         propRASmodel.setOption(RadioButtonProperty.OPTION_2, "Free Rates");
         propRASmodel.selectValue("Free Rates");
 
         // Discrete Gamma model
-        propGamma.selectValue("1.0");
+        propGammaVal.selectValue("1.0");
         state = false;
-        propGamma.setActive(state);
-        AbstractProperty propGammaYesNo = new RadioButtonProperty(nodeGamma, "Estimated/fixed");
+        propGammaVal.setActive(state);
         propGammaYesNo.setOption(RadioButtonProperty.OPTION_1, "estimated");
         propGammaYesNo.setOption(RadioButtonProperty.OPTION_2, "fixed");
         propGammaYesNo.selectValue("estimated");
@@ -190,10 +197,10 @@ public class PhyMLController extends NodeController {
     protected void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event)
     {
 
-        String labelThatChanged = property.getLabel();
+        String idThatChanged = property.getId();
 
         // Input sequence file
-        if("Source".equals(labelThatChanged))
+        if("Source".equals(idThatChanged))
             {
                 if("Example".equals(property.getValue()))
                     {
@@ -212,22 +219,22 @@ public class PhyMLController extends NodeController {
 
         // Substitution models
 
-        AbstractProperty currSubstModels = getProperty("Substitution models");
+        // AbstractProperty currSubstModels = getProperty("Substitution models");
 
-        if("Data type".equals(labelThatChanged))
+        if("Data type".equals(idThatChanged))
             {
 
                 if ("Amino-acids".equals(property.getValue()))
                     {
                         String choicesSubstModelsAA = "Dayhoff;LG;WAG;JTT";
-                        currSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES,choicesSubstModelsAA);
-                        currSubstModels.selectValue("LG");
+                        propSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES,choicesSubstModelsAA);
+                        propSubstModels.selectValue("LG");
                     }
                 else
                     {
                         String choicesSubstModelsNT = "JC69;K80;F81;F84;HKY85;TN93;GTR";
-                        currSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES,choicesSubstModelsNT);
-                        currSubstModels.selectValue("HKY85");
+                        propSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES,choicesSubstModelsNT);
+                        propSubstModels.selectValue("HKY85");
                     }
             }
 
@@ -235,44 +242,48 @@ public class PhyMLController extends NodeController {
 
         // TsTv ratio
 
-        AbstractProperty currTsTvVal   = getProperty("Ts/tv value");
-        AbstractProperty currTsTvYesNo = getProperty("Estimated/fixed");
+        // AbstractProperty currTsTvVal   = getProperty("Ts/tv value");
+        // AbstractProperty currTsTvYesNo = getProperty("TstvEstFix");
 
-        if ("Data type".equals(labelThatChanged))
+        System.out.println("xx propTsTvYesNo:"+propTsTvYesNo.getValue());
+        System.out.println("xx label that changed:"+idThatChanged+" property: "+property.getValue());
+
+
+        if ("Data type".equals(idThatChanged))
             {
                 if("Amino-acids".equals(property.getValue()))
                     {
                         Boolean state = false;
-                        currTsTvVal.setActive(state);
-                        currTsTvYesNo.setActive(state);
+                        propTsTvVal.setActive(state);
+                        propTsTvYesNo.setActive(state);
                     }
                 else
                     {
                         Boolean state = true;
-                        currTsTvYesNo.setActive(state);
-                        currTsTvYesNo.selectValue("estimated");
+                        propTsTvYesNo.setActive(state);
+                        propTsTvYesNo.selectValue("estimated");
 
                         state = false;
-                        currTsTvVal.setActive(state);
+                        propTsTvVal.setActive(state);
                     }
             }
 
 
-        if("TsTv node".equals(node.getId()) && "Estimated/fixed".equals(labelThatChanged))
+        if("TsTvEstFix".equals(idThatChanged))
             {
-                if("fixed".equals(property.getValue()))
+                if("fixed".equals(propTsTvYesNo.getValue()))
                     {
                         Boolean state = true;
-                        currTsTvVal.setActive(state);
+                        propTsTvVal.setActive(state);
                     }
                 else
                     {
                         Boolean state = false;
-                        currTsTvVal.setActive(state);
+                        propTsTvVal.setActive(state);
                     }
             }
 
-        if("Substitution models".equals(labelThatChanged))
+        if("Substitution models".equals(idThatChanged))
             {
                 if(("K80".equals(property.getValue()) ||
                     "F84".equals(property.getValue())  ||
@@ -280,51 +291,51 @@ public class PhyMLController extends NodeController {
                     "TN93".equals(property.getValue())))
                     {
                         Boolean state = true;
-                        currTsTvYesNo.setActive(state);
-                        currTsTvYesNo.selectValue("estimated");
+                        propTsTvYesNo.setActive(state);
+                        propTsTvYesNo.selectValue("estimated");
                     }
                 else
                     {
                         Boolean state = false;
-                        currTsTvVal.setActive(state);
-                        currTsTvYesNo.setActive(state);
+                        propTsTvVal.setActive(state);
+                        propTsTvYesNo.setActive(state);
                     }
             }
 
 
 
         // Rate  across sites
-        AbstractProperty currGammaVal   = getNode("Discrete Gamma node").getProperty("Gamma shape parameter");
-        AbstractProperty currGammaYesNo = getNode("Discrete Gamma node").getProperty("Estimated/fixed");
+        // AbstractProperty currGammaVal   = getNode("Model").getProperty("Gamma shape parameter");
+        // AbstractProperty currGammaYesNo = getNode("Model").getProperty("GammaEstFix");
 
-        if("RAS model node".equals(node.getId()))
+        if("Model".equals(node.getId()))
             {
                 if("Discrete Gamma".equals(property.getValue()))
                     {
 
-                        AbstractProperty currNclasses = node.getProperty("Number of rate classes");
+                        // AbstractProperty currNclasses = node.getProperty("Number of rate classes");
 
-                        if("1".equals(currNclasses.getValue()))
+                        if("1".equals(propRASnclasses.getValue()))
                             {
                                 Boolean state = false;
-                                currGammaYesNo.setActive(state);
-                                currGammaYesNo.selectValue("estimated");
-                                currGammaVal.setActive(state);
+                                propGammaYesNo.setActive(state);
+                                propGammaYesNo.selectValue("estimated");
+                                propGammaVal.setActive(state);
                             }
                         else
                             {
                                 Boolean state = true;
-                                currGammaYesNo.setActive(state);
-                                currGammaYesNo.selectValue("estimated");
+                                propGammaYesNo.setActive(state);
+                                propGammaYesNo.selectValue("estimated");
                                 state = false;
-                                currGammaVal.setActive(state);
+                                propGammaVal.setActive(state);
                             }
                     }
                 else if("Free Rates".equals(property.getValue()))
                     {
                         Boolean state = false;
-                        currGammaVal.setActive(state);
-                        currGammaYesNo.setActive(state);
+                        propGammaVal.setActive(state);
+                        propGammaYesNo.setActive(state);
                     }
 
                 if("Number of rate classes".equals(property.getLabel()))
@@ -332,27 +343,27 @@ public class PhyMLController extends NodeController {
                         if("1".equals(property.getValue()))
                             {
                                 Boolean state = false;
-                                currGammaYesNo.setActive(state);
-                                currGammaVal.setActive(state);
+                                propGammaYesNo.setActive(state);
+                                propGammaVal.setActive(state);
                             }
                         else
                             {
 
                                 AbstractProperty currRASmodel = node.getProperty("Rate variation model");
 
-                                if("Discrete Gamma".equals(currRASmodel.getValue()))
+                                if("Discrete Gamma".equals(propRASmodel.getValue()))
                                     {
                                         Boolean state = true;
-                                        currGammaYesNo.setActive(state);
+                                        propGammaYesNo.setActive(state);
 
-                                        if("fixed".equals(currGammaYesNo.getValue()))
+                                        if("fixed".equals(propGammaYesNo.getValue()))
                                             {
-                                                currGammaVal.setActive(state);
+                                                propGammaVal.setActive(state);
                                             }
                                         else
                                             {
                                                 state = false;
-                                                currGammaVal.setActive(state);
+                                                propGammaVal.setActive(state);
                                             }
                                     }
                             }
@@ -360,17 +371,17 @@ public class PhyMLController extends NodeController {
 
             }
 
-        if("Discrete Gamma node".equals(node.getId()))
+        if("GammaEstFix".equals(idThatChanged))
             {
                 if("estimated".equals(property.getValue()))
                     {
                         Boolean state = false;
-                        currGammaVal.setActive(state);
+                        propGammaVal.setActive(state);
                     }
                 else
                     {
                         Boolean state = true;
-                        currGammaVal.setActive(state);
+                        propGammaVal.setActive(state);
                     }
             }
 

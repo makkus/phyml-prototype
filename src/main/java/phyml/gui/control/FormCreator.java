@@ -88,7 +88,7 @@ public class FormCreator {
             SwingUtilities.invokeAndWait(new Thread() {
                 public void run() {
                     JFrame frame = new JFrame("InputForm");
-                    frame.setSize(600, 400);
+                    frame.setSize(800, 400);
                     JScrollPane scrollPane = new JScrollPane(getForm().getPanel());
                     frame.setContentPane(scrollPane);
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

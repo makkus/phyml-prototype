@@ -26,12 +26,16 @@ public class ComboBoxProperty extends AbstractProperty {
     private JComboBox comboBox;
     private DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
 
-    public ComboBoxProperty(Node parent, String label) {
-        this(parent, label, null);
+    public ComboBoxProperty(Node parent, String id) {
+        this(parent, id, null);
     }
 
-    public ComboBoxProperty(Node parent, String label, String group) {
-        super(parent, label, group);
+    public ComboBoxProperty(Node parent, String id, String group) {
+        this(parent, id, id, group);
+    }
+
+    public ComboBoxProperty(Node parent, String id, String label, String group) {
+        super(parent, id, label, group);
     }
 
     @Override

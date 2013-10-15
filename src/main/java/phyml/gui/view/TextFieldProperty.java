@@ -29,11 +29,15 @@ public class TextFieldProperty extends AbstractProperty {
 
     private String currentText = "";
 
-    public TextFieldProperty(Node parent, String label, String group) {
+    public TextFieldProperty(Node parent, String id, String group) {
+        this(parent, id, id, group);
+    }
+
+    public TextFieldProperty(Node parent, String id, String label, String group) {
         super(parent, label, group);
     }
-    public TextFieldProperty(Node parent, String label) {
-        this(parent, label, null);
+    public TextFieldProperty(Node parent, String id) {
+        this(parent, id, null);
     }
 
     @Override

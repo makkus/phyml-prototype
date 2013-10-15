@@ -25,6 +25,7 @@ public abstract class AbstractProperty {
     public static final String DEFAULT_GROUP_NAME = "__default__";
 
     private static final Logger myLogger = LoggerFactory.getLogger(AbstractProperty.class);
+    protected final String id;
     protected final String label;
     private final Node parent;
     private String value;
@@ -33,8 +34,13 @@ public abstract class AbstractProperty {
 
     private final String group;
 
-    public AbstractProperty(Node parent, String label, String group) {
+    public AbstractProperty(Node parent, String id, String group) {
+        this(parent, id, id, group);
+    }
+
+    public AbstractProperty(Node parent, String id, String label, String group) {
         this.label = label;
+        this.id = id;
         this.parent = parent;
         if (StringUtils.isBlank(group)) {
             this.group = DEFAULT_GROUP_NAME;
@@ -88,7 +94,7 @@ public abstract class AbstractProperty {
     abstract public Set<String> getOptionKeys();
 
     public int hashCode() {
-        return Objects.hashCode(getLabel());
+        return Objects.hashCode(getId());
     }
 
     public boolean equals(Object obj) {
@@ -99,7 +105,7 @@ public abstract class AbstractProperty {
         if (obj instanceof AbstractProperty) {
             final AbstractProperty otherImage = (AbstractProperty) obj;
 
-            return Objects.equal(getLabel(), otherImage.getLabel());
+            return Objects.equal(getId(), otherImage.getId());
         }
 
         return false;
@@ -163,17 +169,21 @@ public abstract class AbstractProperty {
         if (this.active) {
 
             PropertyChangeEvent event = new PropertyChangeEvent(this, "value", oldValue, newValue);
-            myLogger.debug("Changed property for {}: {} [old -> {}] | [new -> {}]", new Object[]{getLabel(), event.getPropertyName(), event.getOldValue(), event.getNewValue()});
+            myLogger.debug("Changed property for {}: {} [old -> {}] | [new -> {}]", new Object[]{getId(), event.getPropertyName(), event.getOldValue(), event.getNewValue()});
 
             parent.valueChanged(event);
         }
     }
 
     public String toString() {
-        return getLabel();
+        return getId();
     }
 
     public String getGroup() {
         return group;
+    }
+
+    public String getId() {
+        return id;
     }
 }

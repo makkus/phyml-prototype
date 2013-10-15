@@ -32,7 +32,7 @@ public class FilePathProperty extends AbstractProperty {
     private static final Logger myLogger = LoggerFactory.getLogger(FilePathProperty.class);
     private JTextField textField;
     private JButton browseButton;
-    private String currentText = "";
+    private String currentPath = "";
 
     private JPanel panel;
 
@@ -95,9 +95,9 @@ public class FilePathProperty extends AbstractProperty {
 
                 @Override
                 public void keyReleased(KeyEvent e) {
-                    String old = currentText;
-                    currentText = textField.getText();
-                    valueChanged(old, currentText);
+                    String old = currentPath;
+                    currentPath = textField.getText();
+                    valueChanged(old, currentPath);
                 }
 
             });
@@ -117,7 +117,10 @@ public class FilePathProperty extends AbstractProperty {
                     fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
                     int returnVal = fc.showOpenDialog(getComponent());
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        getTextField().setText(fc.getSelectedFile().getAbsolutePath());
+                        String old = getTextField().getText();
+                        currentPath = fc.getSelectedFile().getAbsolutePath();
+                        getTextField().setText(currentPath);
+                        valueChanged(old, currentPath);
                     }
                 }
             });
@@ -129,8 +132,8 @@ public class FilePathProperty extends AbstractProperty {
     public void setValue(String value) {
 //        if ( value instanceof String ) {
         getTextField().setText((String) value);
-        String old = currentText;
-        currentText = (String) value;
+        String old = currentPath;
+        currentPath = (String) value;
         valueChanged(old, value);
 //        } else {
 //            myLogger.error("Need value of type String for TextField: {}", value);

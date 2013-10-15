@@ -67,7 +67,7 @@ public class SpinnerProperty extends AbstractProperty {
             myLogger.debug("Can't set spinner value: {}", e.getLocalizedMessage());
         }
 
-        model = new SpinnerNumberModel(0, min, max, step);
+        model = new SpinnerNumberModel(v, min, max, step);
 
         getSpinner().setModel(model);
     }

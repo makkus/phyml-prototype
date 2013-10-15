@@ -71,7 +71,7 @@ public class ExampleController extends NodeController {
     private final AbstractProperty prop_combobox = new ComboBoxProperty(node_combobox, PROPERTY_COMBOBOX);
     // creating node filepath
     private final Node node_filepath = new Node(NODE_FILEPATH);
-    private final AbstractProperty prop_filepath = new FilePathProperty(node_combobox, PROPERTY_FILEPATH);
+    private final AbstractProperty prop_filepath = new FilePathProperty(node_filepath, PROPERTY_FILEPATH);
 
     private final Node node_spinner = new Node(NODE_SPINNER);
     private final AbstractProperty prop_spinner = new SpinnerProperty(node_spinner, PROPERTY_SPINNER);
@@ -84,6 +84,7 @@ public class ExampleController extends NodeController {
         nodes.add(node_textfield);
         nodes.add(node_radiobutton);
         nodes.add(node_combobox);
+        nodes.add(node_filepath);
         nodes.add(node_spinner);
 
         return nodes;

@@ -7,6 +7,8 @@ import phyml.gui.model.AbstractProperty;
 import phyml.gui.model.Node;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.util.Set;
 
 /**
@@ -30,7 +32,7 @@ public class SpinnerProperty extends AbstractProperty {
 
     private JSpinner spinner;
 
-    private String currentText = "";
+    private Integer currentValue = 0;
 
     public SpinnerProperty(Node parent, String id, String group) {
         this(parent, id, id, group);
@@ -52,6 +54,7 @@ public class SpinnerProperty extends AbstractProperty {
     @Override
     protected void reInitialize() {
 
+        Integer old = (Integer)getSpinner().getModel().getValue();
 
         int min = Integer.parseInt(getOption(OPTION_MIN));
         int max = Integer.parseInt(getOption(OPTION_MAX));
@@ -70,6 +73,9 @@ public class SpinnerProperty extends AbstractProperty {
         model = new SpinnerNumberModel(v, min, max, step);
 
         getSpinner().setModel(model);
+
+        currentValue = (Integer)getSpinner().getModel().getValue();
+        valueChanged(old.toString(), currentValue.toString());
     }
 
     @Override
@@ -80,6 +86,14 @@ public class SpinnerProperty extends AbstractProperty {
     public JSpinner getSpinner() {
         if (spinner == null) {
             spinner = new JSpinner(model);
+            spinner.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    Integer old = currentValue;
+                    currentValue = (Integer) spinner.getModel().getValue();
+                    valueChanged(old.toString(), currentValue.toString());
+                }
+            });
         }
         return spinner;
     }

@@ -29,6 +29,8 @@ public class ExampleController extends NodeController {
         // create the GUI
         FormCreator fc = new FormCreator(exampleController);
 
+        fc.setDisplayDebug(true);
+
         // alternatively, you can use different layouts
         //FormCreator fc = new FormCreator(exampleController, FormCreator.SIMPLE_LAYOUT);
         //FormCreator fc = new FormCreator(exampleController, FormCreator.TABBED_LAYOUT);
@@ -40,40 +42,49 @@ public class ExampleController extends NodeController {
 
 
 
-    public static final String NODE_1 = "node1";
-    public static final String NODE_2 = "node2";
-    public static final String NODE_3 = "node3";
+    public static final String NODE_TEXTFIELD = "Node Textfield";
+    public static final String NODE_RADIOBUTTON = "Node Radiobutton";
+    public static final String NODE_COMBOBOX = "Node Combobox";
+    public static final String NODE_FILEPATH = "Node Filepath";
+    public static final String NODE_SPINNER = "Node spinner";
 
-    public static final String PROPERTY_1 = "label1";
-    public static final String PROPERTY_2 = "label2";
-    public static final String PROPERTY_3 = "label3";
-    public static final String PROPERTY_4 = "label4";
-    public static final String PROPERTY_5 = "label5";
+    public static final String PROPERTY_TEXTFIELD = "Textfield";
+    public static final String PROPERTY_RADIOBUTTON_1 = "Radiobutton 1";
+    public static final String PROPERTY_RADIOBUTTON_2 = "RadioButton 2";
+    public static final String PROPERTY_COMBOBOX = "Combobox";
+    public static final String PROPERTY_FILEPATH = "Filepath";
+    public static final String PROPERTY_SPINNER = "Spinner";
 
-    // create node1
-    private final Node node1 = new Node(NODE_1);
-    // adding property for node1 and setting default value
-    private final AbstractProperty prop1 = new TextFieldProperty(node1, PROPERTY_1);
-    //creating node2
-    private final Node node2 = new Node(NODE_2);
+    // create node_textfield
+    private final Node node_textfield = new Node(NODE_TEXTFIELD);
+    // adding property for node_textfield and setting default value
+    private final AbstractProperty prop_textfield = new TextFieldProperty(node_textfield, PROPERTY_TEXTFIELD);
+    //creating node_radiobutton
+    private final Node node_radiobutton = new Node(NODE_RADIOBUTTON);
     // creating 2 properties and setting default value for node 2
-    private final AbstractProperty prop2 = new RadioButtonProperty(node2, PROPERTY_2);
-    private final AbstractProperty prop3 = new RadioButtonProperty(node2, PROPERTY_3);
+    private final AbstractProperty prop_radiobutton_1 = new RadioButtonProperty(node_radiobutton, PROPERTY_RADIOBUTTON_1);
+    private final AbstractProperty prop_radiobutton_2 = new RadioButtonProperty(node_radiobutton, PROPERTY_RADIOBUTTON_2);
     // creating node 3
-    private final Node node3 = new Node(NODE_3);
+    private final Node node_combobox = new Node(NODE_COMBOBOX);
     // creating property for node 3
     private final String choices = "Dayhoff;LG;WAG;JTT";
-    private final AbstractProperty prop4 = new ComboBoxProperty(node3, PROPERTY_4);
-    private final AbstractProperty prop5 = new FilePathProperty(node3, PROPERTY_5);
+    private final AbstractProperty prop_combobox = new ComboBoxProperty(node_combobox, PROPERTY_COMBOBOX);
+    // creating node filepath
+    private final Node node_filepath = new Node(NODE_FILEPATH);
+    private final AbstractProperty prop_filepath = new FilePathProperty(node_combobox, PROPERTY_FILEPATH);
+
+    private final Node node_spinner = new Node(NODE_SPINNER);
+    private final AbstractProperty prop_spinner = new SpinnerProperty(node_spinner, PROPERTY_SPINNER);
 
     @Override
     protected List<Node> createNodes() {
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();
-        nodes.add(node1);
-        nodes.add(node2);
-        nodes.add(node3);
+        nodes.add(node_textfield);
+        nodes.add(node_radiobutton);
+        nodes.add(node_combobox);
+        nodes.add(node_spinner);
 
         return nodes;
     }
@@ -81,18 +92,22 @@ public class ExampleController extends NodeController {
     @Override
     protected void setInitialValues() {
 
-        prop1.selectValue("exampleDefaultValue");
+        prop_textfield.selectValue("exampleDefaultValue");
 
+        prop_radiobutton_1.setOption(RadioButtonProperty.OPTION_1, "Option 1");
+        prop_radiobutton_1.setOption(RadioButtonProperty.OPTION_2, "Option 2");
+        prop_radiobutton_1.selectValue("Option 2");
 
-        prop2.setOption(RadioButtonProperty.OPTION_1, "button1");
-        prop2.setOption(RadioButtonProperty.OPTION_2, "button2");
-        prop2.selectValue("button2");
+        prop_radiobutton_2.setOption(RadioButtonProperty.OPTION_1, "Option 3");
+        prop_radiobutton_2.setOption(RadioButtonProperty.OPTION_2, "Option 4");
+        prop_radiobutton_2.selectValue("Option 3");
 
-        prop3.setOption(RadioButtonProperty.OPTION_1, "button3");
-        prop3.setOption(RadioButtonProperty.OPTION_2, "button4");
-        prop3.selectValue("button3");
+        prop_combobox.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
 
-        prop4.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
+        prop_spinner.setOption(SpinnerProperty.OPTION_MIN, "4");
+        prop_spinner.setOption(SpinnerProperty.OPTION_MAX, "10");
+        prop_spinner.setOption(SpinnerProperty.OPTION_STEP, "2");
+        prop_spinner.selectValue("8");
 
     }
 
@@ -102,17 +117,21 @@ public class ExampleController extends NodeController {
         String labelThatChanged = property.getLabel();
 
         // disable property 1 if 'JTT' is selected in property 4
-        if (PROPERTY_4.equals(labelThatChanged)) {
-
-            AbstractProperty prop = getProperty(PROPERTY_1);
+        if (PROPERTY_COMBOBOX.equals(labelThatChanged)) {
 
             if ("JTT".equals(event.getNewValue())) {
-                prop.setActive(false);
+                prop_textfield.setActive(false);
             } else {
-                prop.setActive(true);
+                prop_textfield.setActive(true);
             }
+
+            // the commandline changes here dont make any sense
+            commandline.clear();
+            commandline.addAll(Lists.newArrayList("--test " + prop_spinner.getValue()));
         } else {
             myLogger.debug("Doing nothing.");
+            // the commandline changes here dont make any sense
+            commandline.add("--"+event.getPropertyName()+event.getNewValue());
         }
 
 

@@ -93,9 +93,6 @@ public class TextFieldProperty extends AbstractProperty {
         return OPTION_KEYS;
     }
 
-    public Object getUserInput() {
-        return textField.getText();
-    }
 
 
 }

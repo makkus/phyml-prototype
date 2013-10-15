@@ -38,6 +38,7 @@ public class SpinnerProperty extends AbstractProperty {
 
     public SpinnerProperty(Node parent, String id, String label, String group) {
         super(parent, label, group);
+        model = new SpinnerNumberModel(0, 0, 10, 1);
     }
     public SpinnerProperty(Node parent, String id) {
         this(parent, id, null);
@@ -78,7 +79,7 @@ public class SpinnerProperty extends AbstractProperty {
 
     public JSpinner getSpinner() {
         if (spinner == null) {
-            spinner = new JSpinner();
+            spinner = new JSpinner(model);
         }
         return spinner;
     }

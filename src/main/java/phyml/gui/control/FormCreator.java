@@ -33,6 +33,8 @@ public class FormCreator {
 
     public FormCreator(NodeController nc) {
         this(nc, COLLAPSIBLE_LAYOUT);
+        nc.initializeNodes();
+
     }
 
     public static void main(String[] args) {

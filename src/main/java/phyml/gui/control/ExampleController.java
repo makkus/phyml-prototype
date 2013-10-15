@@ -50,35 +50,24 @@ public class ExampleController extends NodeController {
     public static final String PROPERTY_4 = "label4";
     public static final String PROPERTY_5 = "label5";
 
+    // create node1
+    private final Node node1 = new Node(NODE_1);
+    // adding property for node1 and setting default value
+    private final AbstractProperty prop1 = new TextFieldProperty(node1, PROPERTY_1);
+    //creating node2
+    private final Node node2 = new Node(NODE_2);
+    // creating 2 properties and setting default value for node 2
+    private final AbstractProperty prop2 = new RadioButtonProperty(node2, PROPERTY_2);
+    private final AbstractProperty prop3 = new RadioButtonProperty(node2, PROPERTY_3);
+    // creating node 3
+    private final Node node3 = new Node(NODE_3);
+    // creating property for node 3
+    private final String choices = "Dayhoff;LG;WAG;JTT";
+    private final AbstractProperty prop4 = new ComboBoxProperty(node3, PROPERTY_4);
+    private final AbstractProperty prop5 = new FilePathProperty(node3, PROPERTY_5);
 
     @Override
-    protected List<Node> initNodes() {
-
-        // create node1
-        Node node1 = new Node(NODE_1);
-        // adding property for node1 and setting default value
-        AbstractProperty prop1 = new TextFieldProperty(node1, PROPERTY_1);
-        prop1.selectValue("exampleDefaultValue");
-
-        //creating node2
-        Node node2 = new Node(NODE_2);
-        // creating 2 properties and setting default value for node 2
-        AbstractProperty prop2 = new RadioButtonProperty(node2, PROPERTY_2);
-        prop2.setOption(RadioButtonProperty.OPTION_1, "button1");
-        prop2.setOption(RadioButtonProperty.OPTION_2, "button2");
-        prop2.selectValue("button2");
-        AbstractProperty prop3 = new RadioButtonProperty(node2, PROPERTY_3);
-        prop3.setOption(RadioButtonProperty.OPTION_1, "button3");
-        prop3.setOption(RadioButtonProperty.OPTION_2, "button4");
-        prop3.selectValue("button3");
-
-        // creating node 3
-        Node node3 = new Node(NODE_3);
-        // creating property for node 3
-        String choices = "Dayhoff;LG;WAG;JTT";
-        AbstractProperty prop4 = new ComboBoxProperty(node3, PROPERTY_4);
-        prop4.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
-        AbstractProperty prop5 = new FilePathProperty(node3, PROPERTY_5);
+    protected List<Node> createNodes() {
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();
@@ -90,7 +79,25 @@ public class ExampleController extends NodeController {
     }
 
     @Override
-    public void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event) {
+    public void setInitialValues() {
+
+        prop1.selectValue("exampleDefaultValue");
+
+
+        prop2.setOption(RadioButtonProperty.OPTION_1, "button1");
+        prop2.setOption(RadioButtonProperty.OPTION_2, "button2");
+        prop2.selectValue("button2");
+
+        prop3.setOption(RadioButtonProperty.OPTION_1, "button3");
+        prop3.setOption(RadioButtonProperty.OPTION_2, "button4");
+        prop3.selectValue("button3");
+
+        prop4.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
+
+    }
+
+    @Override
+    protected void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event) {
 
         String labelThatChanged = property.getLabel();
 

@@ -43,6 +43,10 @@ public class Node {
         return id;
     }
 
+    public void setController(NodeController c) {
+        this.controller = c;
+    }
+
     public int hashCode() {
         return Objects.hashCode(getId());
     }
@@ -74,15 +78,11 @@ public class Node {
 
     public void valueChanged(PropertyChangeEvent evt) {
         AbstractProperty property = (AbstractProperty) evt.getSource();
-        controller.nodeChanged(property.getParentNode(), property, evt);
+        controller.nodeValueChanged(property.getParentNode(), property, evt);
     }
 
     public String toString() {
         return getName();
-    }
-
-    public void setController(NodeController nodeController) {
-        this.controller = nodeController;
     }
 
     protected NodeController getController() {

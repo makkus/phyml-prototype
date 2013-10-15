@@ -54,12 +54,14 @@ abstract public class NodeController {
 		}
     }
 
-    final private List<Node> nodes;
+    private List<Node> nodes;
 
     /**
      * Holds the current commandline.
      */
     final protected LinkedList<String> commandline = Lists.newLinkedList();
+
+    private boolean nodesCreated = false;
 
     public NodeController(){
         this(false);
@@ -68,10 +70,6 @@ abstract public class NodeController {
     public NodeController(boolean useSystemLookAndFeel) {
         if ( useSystemLookAndFeel ) {
             setLookAndFeel();
-        }
-        this.nodes = initNodes();
-        for (Node node : this.nodes) {
-            node.setController(this);
         }
     }
 
@@ -96,11 +94,30 @@ abstract public class NodeController {
     }
 
     /**
-     * returns all the nodes that this controller has access to
+     * Returns all the nodes that this controller has access to.
+     *
+     * Dont set any values there yet, this is done in the setInitialValues() method
      *
      * @return all nodes
      */
-    abstract protected List<Node> initNodes();
+    abstract protected List<Node> createNodes();
+
+    public void initializeNodes() {
+
+        this.nodes = createNodes();
+
+        this.nodesCreated = true;
+
+        for ( Node n : this.nodes ) {
+            n.setController(this);
+        }
+        setInitialValues();;
+    }
+
+    /**
+     * Sets the inital values in the model.
+     */
+    abstract protected void setInitialValues();
 
     public List<Node> getNodes() {
         return nodes;
@@ -113,7 +130,13 @@ abstract public class NodeController {
      * @param property the property that changed
      * @param event    the propertyChangeEvent, containing old and new values and such
      */
-    abstract public void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event);
+    abstract protected void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event);
+
+    public void nodeValueChanged(Node node, AbstractProperty property, PropertyChangeEvent event) {
+        if ( nodesCreated ) {
+            nodeChanged(node, property, event);
+        }
+    }
 
     /**
      * Returns the property with the specified id.

@@ -37,185 +37,44 @@ public class PhyMLController extends NodeController {
 
     }
 
-
-
-    public static final String NODE_1 = "node1";
-    public static final String NODE_2 = "node2";
-    public static final String NODE_3 = "node3";
-
-    public static final String PROPERTY_1 = "label1";
-    public static final String PROPERTY_2 = "label2";
-    public static final String PROPERTY_3 = "label3";
-    public static final String PROPERTY_22 = "label22";
-    public static final String PROPERTY_32 = "label32";
-    public static final String PROPERTY_4 = "label4";
-    public static final String PROPERTY_5 = "label5";
+    private final Node nodeAlignment = new Node("Alignment file node");
+    private final AbstractProperty propAlignment = new FilePathProperty(nodeAlignment, "Alignment file");
+    private final AbstractProperty propAlignmentYesNo = new RadioButtonProperty(nodeAlignment, "Source");
+    private final Node nodeDataType = new Node("Data type node");
+    private final AbstractProperty propDataType = new RadioButtonProperty(nodeDataType, "Data type");
+    private final Node nodeSubstModels = new Node("Substitution models node");
+    private final String choicesSubstModels = "Dayhoff;LG;WAG;JTT";
+    private final AbstractProperty propSubstModels = new ComboBoxProperty(nodeSubstModels, "Substitution models");
+    private final Node nodeTsTv = new Node("TsTv node");
+    private final AbstractProperty propTsTvVal = new TextFieldProperty(nodeTsTv, "Ts/tv value");
+    private final AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeTsTv, "Estimated/fixed");
+    private final Node nodeRASmodel = new Node("RAS model node");
+    private final AbstractProperty propRASnclasses = new TextFieldProperty(nodeRASmodel, "Number of rate classes");
+    private final AbstractProperty propRASmodel = new RadioButtonProperty(nodeRASmodel, "Rate variation model");
+    private final Node nodeGamma = new Node("Discrete Gamma node");
+    private final AbstractProperty propGamma = new TextFieldProperty(nodeGamma, "Gamma shape parameter");
+    private final Node nodeStartingTree = new Node("Starting tree node");
+    private final AbstractProperty propStartingTree = new FilePathProperty(nodeStartingTree, "Starting tree");
+    private final AbstractProperty propStartingTreeYesNo = new RadioButtonProperty(nodeStartingTree, "Source");
+    private final Node nodeTreeSearch = new Node("Tree search node");
+    private final AbstractProperty propTreeSearch = new ComboBoxProperty(nodeTreeSearch, "Tree search method");
+    private final Node nodeRandomStarts = new Node("Random starts node");
+    private final AbstractProperty propRandomStarts = new TextFieldProperty(nodeRandomStarts, "Number of random starting trees");
+    private final Node nodeOptTree = new Node("Optimize tree node");
+    private final AbstractProperty propOptTree = new RadioButtonProperty(nodeOptTree, "Optimize tree");
+    private final Node nodeOptLens = new Node("Optimize edge lengths node");
+    private final AbstractProperty propOptLens = new RadioButtonProperty(nodeOptLens, "Optimize edge lengths");
+    private final Node nodeEdgeSupport = new Node("Edge support node");
+    private final AbstractProperty propBootstrapYesNo = new RadioButtonProperty(nodeEdgeSupport, "Bootstrap");
+    private final AbstractProperty propBootstrapRepeats = new TextFieldProperty(nodeEdgeSupport, "Number of bootstrap iterations");
+    private final AbstractProperty propFastSupport = new ComboBoxProperty(nodeEdgeSupport, "Fast branch support method");
 
 
     @Override
-    protected List<Node> initNodes() {
-
-        Boolean state = false;
-
-        // create node1
-        Node node1 = new Node(NODE_1);
-        // adding property for node1 and setting default value
-        AbstractProperty prop1 = new TextFieldProperty(node1, PROPERTY_1);
-        prop1.selectValue("exampleDefaultValue");
-
-        //creating node2
-        Node node2 = new Node(NODE_2);
-        // creating 2 properties and setting default value for node 2
-        AbstractProperty prop2 = new RadioButtonProperty(node2, PROPERTY_2, "testgroup");
-        prop2.setOption(RadioButtonProperty.OPTION_1, "button1");
-        prop2.setOption(RadioButtonProperty.OPTION_2, "button2");
-        prop2.selectValue("button2");
-        AbstractProperty prop3 = new RadioButtonProperty(node2, PROPERTY_3, "testgroup");
-        prop3.setOption(RadioButtonProperty.OPTION_1, "button3");
-        prop3.setOption(RadioButtonProperty.OPTION_2, "button4");
-        prop3.selectValue("button3");
-        AbstractProperty prop22 = new RadioButtonProperty(node2, PROPERTY_22, "testgroup2");
-        prop22.setOption(RadioButtonProperty.OPTION_1, "button12");
-        prop22.setOption(RadioButtonProperty.OPTION_2, "button22");
-        prop22.selectValue("button2");
-        AbstractProperty prop32 = new RadioButtonProperty(node2, PROPERTY_32, "testgroup2");
-        prop32.setOption(RadioButtonProperty.OPTION_1, "button32");
-        prop32.setOption(RadioButtonProperty.OPTION_2, "button42");
-        prop32.selectValue("button3");
-
-        // creating node 3
-        Node node3 = new Node(NODE_3);
-        // creating property for node 3
-        String choices = "Dayhoff;LG;WAG;JTT";
-        AbstractProperty prop4 = new ComboBoxProperty(node3, PROPERTY_4);
-        prop4.setOption(ComboBoxProperty.OPTION_CHOICES, choices);
-        AbstractProperty prop5 = new FilePathProperty(node3, PROPERTY_5);
-
-
-        //Alignment file
-        Node nodeAlignment = new Node("Alignment file node");
-        AbstractProperty propAlignment = new FilePathProperty(nodeAlignment, "Alignment file");
-        AbstractProperty propAlignmentYesNo = new RadioButtonProperty(nodeAlignment, "Source");
-        propAlignmentYesNo.setOption(RadioButtonProperty.OPTION_1, "File");
-        propAlignmentYesNo.setOption(RadioButtonProperty.OPTION_2, "Example");
-        propAlignmentYesNo.selectValue("File");
-
-        //Data type
-        Node nodeDataType = new Node("Data type node");
-        AbstractProperty propDataType = new RadioButtonProperty(nodeDataType, "Data type");
-        propDataType.setOption(RadioButtonProperty.OPTION_1, "Amino-acids");
-        propDataType.setOption(RadioButtonProperty.OPTION_2, "Nucleotides");
-        propDataType.selectValue("Nucleotides");
-
-
-
-        // Substitution model
-        Node nodeSubstModels = new Node("Substitution models node");
-        String choicesSubstModels = "Dayhoff;LG;WAG;JTT";
-        AbstractProperty propSubstModels = new ComboBoxProperty(nodeSubstModels, "Substitution models");
-        propSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES, choicesSubstModels);
-        propSubstModels.selectValue("LG");
-
-
-
-        // Transition/transversion ratio
-        Node nodeTsTv = new Node("TsTv node");
-        AbstractProperty propTsTvVal = new TextFieldProperty(nodeTsTv, "Ts/tv value");
-        propTsTvVal.selectValue("4.0");
-        state = false;
-        propTsTvVal.setActive(state);
-        AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeTsTv, "Estimated/fixed");
-        propTsTvYesNo.setOption(RadioButtonProperty.OPTION_1, "estimated");
-        propTsTvYesNo.setOption(RadioButtonProperty.OPTION_2, "fixed");
-        propTsTvYesNo.selectValue("estimated");
-
-
-        // RAS model
-        Node nodeRASmodel = new Node("RAS model node");
-        AbstractProperty propRASnclasses = new TextFieldProperty(nodeRASmodel, "Number of rate classes");
-        propRASnclasses.selectValue("4");
-        AbstractProperty propRASmodel = new RadioButtonProperty(nodeRASmodel, "Rate variation model");
-        propRASmodel.setOption(RadioButtonProperty.OPTION_1, "Discrete Gamma");
-        propRASmodel.setOption(RadioButtonProperty.OPTION_2, "Free Rates");
-        propRASmodel.selectValue("Free Rates");
-
-        // Discrete Gamma model
-        Node nodeGamma = new Node("Discrete Gamma node");
-        AbstractProperty propGamma = new TextFieldProperty(nodeGamma, "Gamma shape parameter");
-        propGamma.selectValue("1.0");
-        state = false;
-        propGamma.setActive(state);
-        AbstractProperty propGammaYesNo = new RadioButtonProperty(nodeGamma, "Estimated/fixed");
-        propGammaYesNo.setOption(RadioButtonProperty.OPTION_1, "estimated");
-        propGammaYesNo.setOption(RadioButtonProperty.OPTION_2, "fixed");
-        propGammaYesNo.selectValue("estimated");
-        state = false;
-        propGammaYesNo.setActive(state);
-
-
-
-        //Starting tree
-        Node nodeStartingTree = new Node("Starting tree node");
-        AbstractProperty propStartingTree = new FilePathProperty(nodeStartingTree, "Starting tree");
-        AbstractProperty propStartingTreeYesNo = new RadioButtonProperty(nodeStartingTree, "Source");
-        propStartingTreeYesNo.setOption(RadioButtonProperty.OPTION_1, "File");
-        propStartingTreeYesNo.setOption(RadioButtonProperty.OPTION_2, "BioNJ");
-        propStartingTreeYesNo.selectValue("BioNJ");
-
-
-        //Starting tree
-        Node nodeTreeSearch = new Node("Tree search node");
-        AbstractProperty propTreeSearch = new ComboBoxProperty(nodeTreeSearch, "Tree search method");
-        propTreeSearch.setOption(ComboBoxProperty.OPTION_CHOICES,"NNI;SPR;NNI+SPR");
-        propTreeSearch.selectValue("SPR");
-
-
-        //Random starting trees
-        Node nodeRandomStarts = new Node("Random starts node");
-        AbstractProperty propRandomStarts = new TextFieldProperty(nodeRandomStarts, "Number of random starting trees");
-        propRandomStarts.selectValue("5");
-        state = true;
-        propRandomStarts.setActive(state);
-
-
-        //Optimize tree
-        Node nodeOptTree = new Node("Optimize tree node");
-        AbstractProperty propOptTree = new RadioButtonProperty(nodeOptTree, "Optimize tree");
-        propOptTree.setOption(RadioButtonProperty.OPTION_1, "Yes");
-        propOptTree.setOption(RadioButtonProperty.OPTION_2, "No");
-        propOptTree.selectValue("Yes");
-
-        //Optimize edge lengths
-        Node nodeOptLens = new Node("Optimize edge lengths node");
-        AbstractProperty propOptLens = new RadioButtonProperty(nodeOptLens, "Optimize edge lengths");
-        propOptLens.setOption(RadioButtonProperty.OPTION_1, "Yes");
-        propOptLens.setOption(RadioButtonProperty.OPTION_2, "No");
-        propOptLens.selectValue("Yes");
-
-        //Edge support
-        Node nodeEdgeSupport = new Node("Edge support node");
-        AbstractProperty propBootstrapYesNo = new RadioButtonProperty(nodeEdgeSupport, "Bootstrap");
-        propBootstrapYesNo.setOption(RadioButtonProperty.OPTION_1, "Yes");
-        propBootstrapYesNo.setOption(RadioButtonProperty.OPTION_2, "No");
-        propBootstrapYesNo.selectValue("No");
-        AbstractProperty propBootstrapRepeats = new TextFieldProperty(nodeEdgeSupport, "Number of bootstrap iterations");
-        propBootstrapRepeats.selectValue("100");
-        state = false;
-        propBootstrapRepeats.setActive(state);
-
-        AbstractProperty propFastSupport = new ComboBoxProperty(nodeEdgeSupport, "Fast branch support method");
-        propFastSupport.setOption(ComboBoxProperty.OPTION_CHOICES,"aLRT SH-like;aLRT Chi2-based;aBayes");
-        propFastSupport.selectValue("aBayes");
-        state = true;
-        propFastSupport.setActive(state);
-
-
+    protected List<Node> createNodes() {
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();
-        nodes.add(node1);
-        nodes.add(node2);
-        nodes.add(node3);
         nodes.add(nodeAlignment);
         nodes.add(nodeDataType);
         nodes.add(nodeSubstModels);
@@ -233,7 +92,100 @@ public class PhyMLController extends NodeController {
     }
 
     @Override
-    public void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event)
+    public void setInitialValues() {
+
+        Boolean state = false;
+
+        //Alignment file
+        propAlignmentYesNo.setOption(RadioButtonProperty.OPTION_1, "File");
+        propAlignmentYesNo.setOption(RadioButtonProperty.OPTION_2, "Example");
+        propAlignmentYesNo.selectValue("File");
+
+        //Data type
+        propDataType.setOption(RadioButtonProperty.OPTION_1, "Amino-acids");
+        propDataType.setOption(RadioButtonProperty.OPTION_2, "Nucleotides");
+        propDataType.selectValue("Nucleotides");
+
+
+
+        // Substitution model
+        propSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES, choicesSubstModels);
+        propSubstModels.selectValue("LG");
+
+
+
+        // Transition/transversion ratio
+        propTsTvVal.selectValue("4.0");
+        state = false;
+        propTsTvVal.setActive(state);
+        propTsTvYesNo.setOption(RadioButtonProperty.OPTION_1, "estimated");
+        propTsTvYesNo.setOption(RadioButtonProperty.OPTION_2, "fixed");
+        propTsTvYesNo.selectValue("estimated");
+
+
+        // RAS model
+        propRASnclasses.selectValue("4");
+        propRASmodel.setOption(RadioButtonProperty.OPTION_1, "Discrete Gamma");
+        propRASmodel.setOption(RadioButtonProperty.OPTION_2, "Free Rates");
+        propRASmodel.selectValue("Free Rates");
+
+        // Discrete Gamma model
+        propGamma.selectValue("1.0");
+        state = false;
+        propGamma.setActive(state);
+        AbstractProperty propGammaYesNo = new RadioButtonProperty(nodeGamma, "Estimated/fixed");
+        propGammaYesNo.setOption(RadioButtonProperty.OPTION_1, "estimated");
+        propGammaYesNo.setOption(RadioButtonProperty.OPTION_2, "fixed");
+        propGammaYesNo.selectValue("estimated");
+        state = false;
+        propGammaYesNo.setActive(state);
+
+
+
+        //Starting tree
+        propStartingTreeYesNo.setOption(RadioButtonProperty.OPTION_1, "File");
+        propStartingTreeYesNo.setOption(RadioButtonProperty.OPTION_2, "BioNJ");
+        propStartingTreeYesNo.selectValue("BioNJ");
+
+
+        //Starting tree
+        propTreeSearch.setOption(ComboBoxProperty.OPTION_CHOICES,"NNI;SPR;NNI+SPR");
+        propTreeSearch.selectValue("SPR");
+
+
+        //Random starting trees
+        propRandomStarts.selectValue("5");
+        state = true;
+        propRandomStarts.setActive(state);
+
+
+        //Optimize tree
+        propOptTree.setOption(RadioButtonProperty.OPTION_1, "Yes");
+        propOptTree.setOption(RadioButtonProperty.OPTION_2, "No");
+        propOptTree.selectValue("Yes");
+
+        //Optimize edge lengths
+        propOptLens.setOption(RadioButtonProperty.OPTION_1, "Yes");
+        propOptLens.setOption(RadioButtonProperty.OPTION_2, "No");
+        propOptLens.selectValue("Yes");
+
+        //Edge support
+        propBootstrapYesNo.setOption(RadioButtonProperty.OPTION_1, "Yes");
+        propBootstrapYesNo.setOption(RadioButtonProperty.OPTION_2, "No");
+        propBootstrapYesNo.selectValue("No");
+        propBootstrapRepeats.selectValue("100");
+        state = false;
+        propBootstrapRepeats.setActive(state);
+
+        propFastSupport.setOption(ComboBoxProperty.OPTION_CHOICES,"aLRT SH-like;aLRT Chi2-based;aBayes");
+        propFastSupport.selectValue("aBayes");
+        state = true;
+        propFastSupport.setActive(state);
+
+    }
+
+    @Override
+    protected void nodeChanged(Node node, AbstractProperty property, PropertyChangeEvent event)
     {
 
         String labelThatChanged = property.getLabel();

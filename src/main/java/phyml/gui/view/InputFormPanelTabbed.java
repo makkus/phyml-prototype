@@ -28,7 +28,7 @@ public class InputFormPanelTabbed extends AbstractInputForm {
     public void addNode(Node node) {
 
         String name = node.getName();
-        JPanel temp = assembleNodeForm(node);
+        JPanel temp = assembleNode(node);
 
         tabbedPane.addTab(name, temp);
 

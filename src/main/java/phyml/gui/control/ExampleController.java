@@ -8,6 +8,7 @@ import phyml.gui.view.FilePathProperty;
 import phyml.gui.view.RadioButtonProperty;
 import phyml.gui.view.TextFieldProperty;
 
+import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
@@ -40,13 +41,9 @@ public class ExampleController extends NodeController {
 
     }
 
-
-
     public static final String NODE_TEXTFIELD = "Node Textfield";
-    public static final String NODE_RADIOBUTTON = "Node Radiobutton";
-    public static final String NODE_COMBOBOX = "Node Combobox";
-    public static final String NODE_FILEPATH = "Node Filepath";
-    public static final String NODE_SPINNER = "Node spinner";
+    public static final String NODE_RADIOBUTTON = "Node Groups horizontal/Properties vertical";
+    public static final String NODE_COMBOBOX = "Node Properties horizontal";
 
     public static final String PROPERTY_TEXTFIELD = "Textfield";
     public static final String PROPERTY_RADIOBUTTON_1 = "Radiobutton 1";
@@ -61,31 +58,33 @@ public class ExampleController extends NodeController {
     private final AbstractProperty prop_textfield = new TextFieldProperty(node_textfield, PROPERTY_TEXTFIELD);
     //creating node_radiobutton
     private final Node node_radiobutton = new Node(NODE_RADIOBUTTON);
+
     // creating 2 properties and setting default value for node 2
-    private final AbstractProperty prop_radiobutton_1 = new RadioButtonProperty(node_radiobutton, PROPERTY_RADIOBUTTON_1);
-    private final AbstractProperty prop_radiobutton_2 = new RadioButtonProperty(node_radiobutton, PROPERTY_RADIOBUTTON_2);
+    private final AbstractProperty prop_radiobutton_1 = new RadioButtonProperty(node_radiobutton, PROPERTY_RADIOBUTTON_1, "Radiobuttons");
+    private final AbstractProperty prop_radiobutton_2 = new RadioButtonProperty(node_radiobutton, PROPERTY_RADIOBUTTON_2, "Radiobuttons");
+    private final AbstractProperty prop_spinner = new SpinnerProperty(node_radiobutton, PROPERTY_SPINNER, "Spinner");
     // creating node 3
     private final Node node_combobox = new Node(NODE_COMBOBOX);
     // creating property for node 3
     private final String choices = "Dayhoff;LG;WAG;JTT";
     private final AbstractProperty prop_combobox = new ComboBoxProperty(node_combobox, PROPERTY_COMBOBOX);
     // creating node filepath
-    private final Node node_filepath = new Node(NODE_FILEPATH);
-    private final AbstractProperty prop_filepath = new FilePathProperty(node_filepath, PROPERTY_FILEPATH);
+    private final AbstractProperty prop_filepath = new FilePathProperty(node_combobox, PROPERTY_FILEPATH);
 
-    private final Node node_spinner = new Node(NODE_SPINNER);
-    private final AbstractProperty prop_spinner = new SpinnerProperty(node_spinner, PROPERTY_SPINNER);
 
     @Override
     protected List<Node> createNodes() {
+
+        // 2 groups
+        node_radiobutton.setLayoutGroups(BoxLayout.X_AXIS);
+
+        node_combobox.setLayoutProperties(BoxLayout.X_AXIS);
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();
         nodes.add(node_textfield);
         nodes.add(node_radiobutton);
         nodes.add(node_combobox);
-        nodes.add(node_filepath);
-        nodes.add(node_spinner);
 
         return nodes;
     }

@@ -27,7 +27,7 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         super();
     }
 
-    private static JPanel assemblePropertyForm(AbstractProperty p) {
+    private static JPanel assembleProperty(AbstractProperty p) {
 
         JPanel panel = new JPanel();
 //        panel.setMinimumSize(new Dimension(400, 32));
@@ -61,7 +61,7 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         return panel;
     }
 
-    protected static JPanel assembleNodeForm(Node node) {
+    protected static JPanel assembleNode(Node node) {
 
         Multimap<String, AbstractProperty> groups = getPropertyGroups(node.getProperties().values());
         JPanel panel = new JPanel();
@@ -76,7 +76,7 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
 //            JSeparator sep = null;
 //
 //            for (String name : node.getProperties().keySet()) {
-//                JPanel temp = assemblePropertyForm(node.getProperties().get(name));
+//                JPanel temp = assembleProperty(node.getProperties().get(name));
 //                panel.add(temp);
 //                sep = new JSeparator();
 //                panel.add(sep);
@@ -86,7 +86,7 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         } else {
 
             // create the panel that contains all properties using BoxLayout
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.setLayout(new BoxLayout(panel, node.getLayoutGroups()));
 
             for (String group : groups.keySet()) {
 
@@ -94,10 +94,10 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
                 if ( ! AbstractProperty.DEFAULT_GROUP_NAME.equals(group) ) {
                     panel_tmp.setBorder(new TitledBorder(group));
                 }
-                panel_tmp.setLayout(new BoxLayout(panel_tmp, BoxLayout.Y_AXIS));
+                panel_tmp.setLayout(new BoxLayout(panel_tmp, node.getLayoutProperties()));
 
                 for (AbstractProperty prop : groups.get(group)) {
-                    JPanel temp = assemblePropertyForm(prop);
+                    JPanel temp = assembleProperty(prop);
                     panel_tmp.add(temp);
                 }
 

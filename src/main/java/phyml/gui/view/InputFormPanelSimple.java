@@ -22,7 +22,7 @@ public class InputFormPanelSimple extends AbstractInputForm {
     public void addNode(Node node) {
 
         add(new JLabel(node.getName()));
-        JPanel temp = assembleNodeForm(node);
+        JPanel temp = assembleNode(node);
         add(temp);
         add(new JSeparator());
 

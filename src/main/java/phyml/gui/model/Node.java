@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phyml.gui.control.NodeController;
 
+import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
 
@@ -20,11 +21,12 @@ import java.util.Map;
 public class Node {
 
     protected static final Logger myLogger = LoggerFactory.getLogger(Node.class);
-
     protected final String name;
     protected final String id;
     final private Map<String, AbstractProperty> properties = Maps.newLinkedHashMap();
     private NodeController controller;
+    private int layoutGroups = BoxLayout.Y_AXIS;
+    private int layoutProperties = BoxLayout.Y_AXIS;
 
     public Node(String id) {
         this(id, id);
@@ -35,16 +37,28 @@ public class Node {
         this.name = name;
     }
 
+    public int getLayoutGroups() {
+        return layoutGroups;
+    }
+
+    public void setLayoutGroups(int layoutGroups) {
+        this.layoutGroups = layoutGroups;
+    }
+
+    public int getLayoutProperties() {
+        return layoutProperties;
+    }
+
+    public void setLayoutProperties(int layoutProperties) {
+        this.layoutProperties = layoutProperties;
+    }
+
     public String getName() {
         return name;
     }
 
     public String getId() {
         return id;
-    }
-
-    public void setController(NodeController c) {
-        this.controller = c;
     }
 
     public int hashCode() {
@@ -87,5 +101,9 @@ public class Node {
 
     protected NodeController getController() {
         return controller;
+    }
+
+    public void setController(NodeController c) {
+        this.controller = c;
     }
 }

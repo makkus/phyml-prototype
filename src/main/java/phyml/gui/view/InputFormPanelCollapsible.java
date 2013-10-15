@@ -44,7 +44,7 @@ public class InputFormPanelCollapsible extends AbstractInputForm {
     public void addNode(final Node node) {
 
         String name = node.getName();
-        JPanel temp = assembleNodeForm(node);
+        JPanel temp = assembleNode(node);
 
         final JXCollapsiblePane cp = new JXCollapsiblePane();
         final JToggleButton collapse = new JToggleButton(name, TOGGLE);

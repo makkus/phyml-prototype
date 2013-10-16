@@ -79,7 +79,7 @@ public class Node {
     }
 
     public void addProperty(AbstractProperty prop) {
-        properties.put(prop.getLabel(), prop);
+        properties.put(prop.getId(), prop);
     }
 
     public AbstractProperty getProperty(String label) {

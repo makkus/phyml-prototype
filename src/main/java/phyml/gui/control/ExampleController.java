@@ -45,12 +45,19 @@ public class ExampleController extends NodeController {
     public static final String NODE_RADIOBUTTON = "Node Groups horizontal/Properties vertical";
     public static final String NODE_COMBOBOX = "Node Properties horizontal";
 
+    public static final String NODE_GROUPS = "Node Groups vertical/Properties horizontal";
+
     public static final String PROPERTY_TEXTFIELD = "Textfield";
     public static final String PROPERTY_RADIOBUTTON_1 = "Radiobutton 1";
     public static final String PROPERTY_RADIOBUTTON_2 = "RadioButton 2";
     public static final String PROPERTY_COMBOBOX = "Combobox";
     public static final String PROPERTY_FILEPATH = "Filepath";
     public static final String PROPERTY_SPINNER = "Spinner";
+
+    public static final String PROPERTY_GROUP_TEXTFIELD_1 = "Textfield 1";
+    public static final String PROPERTY_GROUP_TEXTFIELD_2 = "Textfield 2";
+    public static final String PROPERTY_GROUP_RADIOBUTTON_1 = "Group radio 1";
+    public static final String PROPERTY_GROUP_RADIOBUTTON_2 = "Group radio 2";
 
     // create node_textfield
     private final Node node_textfield = new Node(NODE_TEXTFIELD);
@@ -71,6 +78,11 @@ public class ExampleController extends NodeController {
     // creating node filepath
     private final AbstractProperty prop_filepath = new FilePathProperty(node_combobox, PROPERTY_FILEPATH);
 
+    private final Node node_groups = new Node(NODE_GROUPS);
+    private final AbstractProperty prop_group_text_1 = new TextFieldProperty(node_groups, PROPERTY_GROUP_TEXTFIELD_1,  PROPERTY_GROUP_TEXTFIELD_1, "_group1_");
+    private final AbstractProperty prop_group_radio_1 = new RadioButtonProperty(node_groups, PROPERTY_GROUP_RADIOBUTTON_1, null, "_group1_");
+    private final AbstractProperty prop_group_text_2 = new TextFieldProperty(node_groups, PROPERTY_GROUP_TEXTFIELD_2,  PROPERTY_GROUP_TEXTFIELD_2, "_group2_");
+    private final AbstractProperty prop_group_radio_2 = new RadioButtonProperty(node_groups, PROPERTY_GROUP_RADIOBUTTON_2, null, "_group2_");
 
     public ExampleController() {
         // if you want to change the default label witdth, you can do that here:
@@ -84,13 +96,16 @@ public class ExampleController extends NodeController {
         // 2 groups
         node_radiobutton.setLayoutGroups(BoxLayout.X_AXIS);
 
-        node_combobox.setLayoutProperties(BoxLayout.X_AXIS);
+        node_groups.setLayoutProperties(BoxLayout.X_AXIS);
+
+        node_groups.setLayoutGroups(BoxLayout.Y_AXIS);
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();
         nodes.add(node_textfield);
         nodes.add(node_radiobutton);
         nodes.add(node_combobox);
+        nodes.add(node_groups);
 
         return nodes;
     }
@@ -114,6 +129,14 @@ public class ExampleController extends NodeController {
         prop_spinner.setOption(SpinnerProperty.OPTION_MAX, "10");
         prop_spinner.setOption(SpinnerProperty.OPTION_STEP, "2");
         prop_spinner.selectValue("8");
+
+        prop_group_text_1.selectValue("This is an example");
+        prop_group_text_2.selectValue("This is another example");
+
+        prop_group_radio_1.setOption(RadioButtonProperty.OPTION_1, "Yes");
+        prop_group_radio_1.setOption(RadioButtonProperty.OPTION_2, "No");
+        prop_group_radio_2.setOption(RadioButtonProperty.OPTION_1, "Maybe");
+        prop_group_radio_2.setOption(RadioButtonProperty.OPTION_2, "Maybe not");
 
     }
 

@@ -21,6 +21,7 @@ import java.util.Map;
 public class Node {
 
     public static int DEFAULT_LABEL_WIDTH = 150;
+
     protected static final Logger myLogger = LoggerFactory.getLogger(Node.class);
     protected final String name;
     protected final String id;

@@ -72,6 +72,10 @@ public class PhyMLController extends NodeController {
     private final AbstractProperty propFastSupport = new ComboBoxProperty(nodeEdgeSupport, "Fast branch support method");
 
 
+    public PhyMLController() {
+        Node.DEFAULT_LABEL_WIDTH = 200;
+    }
+
     @Override
     protected List<Node> createNodes() {
 

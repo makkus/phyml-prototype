@@ -72,6 +72,12 @@ public class ExampleController extends NodeController {
     private final AbstractProperty prop_filepath = new FilePathProperty(node_combobox, PROPERTY_FILEPATH);
 
 
+    public ExampleController() {
+        // if you want to change the default label witdth, you can do that here:
+        Node.DEFAULT_LABEL_WIDTH = 200;
+        // otherwise, change it by calling the method on the Node object
+    }
+
     @Override
     protected List<Node> createNodes() {
 

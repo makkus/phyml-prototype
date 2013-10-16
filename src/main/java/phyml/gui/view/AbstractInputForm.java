@@ -28,6 +28,10 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
     }
 
     private static JPanel assembleProperty(AbstractProperty p) {
+       return assembleProperty(p, Node.DEFAULT_LABEL_WIDTH);
+    }
+
+    private static JPanel assembleProperty(AbstractProperty p, int labelWidth) {
 
         JPanel panel = new JPanel();
 //        panel.setMinimumSize(new Dimension(400, 32));
@@ -40,7 +44,7 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         ColumnSpec[] cs = new ColumnSpec[]{
                 FormSpecs.RELATED_GAP_COLSPEC,
                 //ColumnSpec.decode("right:pref"),
-                ColumnSpec.decode("right:100px"),
+                ColumnSpec.decode("right:"+labelWidth+"px"),
                 FormSpecs.RELATED_GAP_COLSPEC,
                 ColumnSpec.decode("pref:grow"),
                 FormSpecs.RELATED_GAP_COLSPEC
@@ -97,7 +101,7 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
                 panel_tmp.setLayout(new BoxLayout(panel_tmp, node.getLayoutProperties()));
 
                 for (AbstractProperty prop : groups.get(group)) {
-                    JPanel temp = assembleProperty(prop);
+                    JPanel temp = assembleProperty(prop, node.getLabelWidth());
                     panel_tmp.add(temp);
                 }
 

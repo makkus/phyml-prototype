@@ -42,31 +42,32 @@ public class PhyMLController extends NodeController {
     }
 
     private final Node nodeInput = new Node("Input data");
-    private final AbstractProperty propAlignment = new FilePathProperty(nodeInput, "Alignment file");
-    private final AbstractProperty propAlignmentYesNo = new RadioButtonProperty(nodeInput, "Source");
-    private final AbstractProperty propDataType = new RadioButtonProperty(nodeInput, "Data type");
-    private final AbstractProperty propFormat = new RadioButtonProperty(nodeInput, "Format");
+    private final AbstractProperty propAlignment = new FilePathProperty(nodeInput, "Alignment file","_input");
+    private final AbstractProperty propAlignmentYesNo = new RadioButtonProperty(nodeInput,null,"_input");
+    private final AbstractProperty propDataType = new RadioButtonProperty(nodeInput, "Data type","_datatype");
+    private final AbstractProperty propFormat = new RadioButtonProperty(nodeInput, "Format","_format");
 
     private final Node nodeModel = new Node("Substitution model");
     private final String choicesSubstModels = "Dayhoff;LG;WAG;JTT";
     private final AbstractProperty propSubstModels = new ComboBoxProperty(nodeModel, "Substitution models");
-    private final AbstractProperty propTsTvVal = new TextFieldProperty(nodeModel,"Ts/tv value","Ts/Tv");
-    private final AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeModel,"TsTvEstFix","Estimated/Fixed","Ts/Tv");
+    private final AbstractProperty propTsTvVal = new TextFieldProperty(nodeModel,"Ts/tv value","_Ts/Tv");
+    private final AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeModel,"TsTvEstFix",null,"_Ts/Tv");
 
-    private final AbstractProperty propRASnclasses = new SpinnerProperty(nodeModel, "Number of rate classes","Rate across sites");
-    private final AbstractProperty propRASmodel = new RadioButtonProperty(nodeModel, "Rate variation model","Rate across sites");
-    private final AbstractProperty propGammaVal = new TextFieldProperty(nodeModel, "Gamma shape parameter","Rate across sites");
-    private final AbstractProperty propGammaYesNo = new RadioButtonProperty(nodeModel,"GammaEstFix","Estimated/Fixed","Rate across sites");
-    private final AbstractProperty propInvVal = new TextFieldProperty(nodeModel, "Proportion of invariants","Rate across sites");
-    private final AbstractProperty propInvYesNo = new RadioButtonProperty(nodeModel,"InvEstFix","Estimated/Fixed","Rate across sites");
+    private final AbstractProperty propRASmodel = new RadioButtonProperty(nodeModel,"Rate across sites","_Rate across sites");
+    private final AbstractProperty propRASnclasses = new SpinnerProperty(nodeModel, "Number of classes","_Nclasses");
+    private final AbstractProperty propGammaVal = new TextFieldProperty(nodeModel, "Gamma shape parameter","_Gamma");
+    private final AbstractProperty propGammaYesNo = new RadioButtonProperty(nodeModel,"GammaEstFix",null,"_Gamma");
+    private final AbstractProperty propInvVal = new TextFieldProperty(nodeModel, "Proportion of invariants","_Invariants");
+    private final AbstractProperty propInvYesNo = new RadioButtonProperty(nodeModel,"InvEstFix",null,"_Invariants");
 
     private final Node nodeTree = new Node("Tree searching");
-    private final AbstractProperty propStartingTree = new FilePathProperty(nodeTree, "Starting tree");
-    private final AbstractProperty propStartingTreeYesNo = new ComboBoxProperty(nodeTree, "Source");
-    private final AbstractProperty propTreeSearch = new ComboBoxProperty(nodeTree, "Tree search method");
-    private final AbstractProperty propRandomStarts = new TextFieldProperty(nodeTree, "Number of random starting trees");
-    private final AbstractProperty propOptTree = new RadioButtonProperty(nodeTree, "Optimize tree");
-    private final AbstractProperty propOptLens = new RadioButtonProperty(nodeTree, "Optimize edge lengths");
+    private final AbstractProperty propStartingTreeYesNo = new ComboBoxProperty(nodeTree, "Initial tree","_StartTree");
+    private final AbstractProperty propStartingTree = new FilePathProperty(nodeTree, "Starting tree",null,"_StartTree");
+    private final AbstractProperty propTreeSearch = new ComboBoxProperty(nodeTree, "Tree search method","__Search");
+    private final AbstractProperty propRandomStartsYesNo = new RadioButtonProperty(nodeTree, "Random starting trees","__RandomStart");
+    private final AbstractProperty propRandomStarts = new TextFieldProperty(nodeTree, "# random starting trees","__RandomStart");
+    private final AbstractProperty propOptTree = new RadioButtonProperty(nodeTree, "Optimize tree","__Opt");
+    private final AbstractProperty propOptLens = new RadioButtonProperty(nodeTree, "Optimize edge lengths","__Opt");
 
 
     
@@ -82,6 +83,15 @@ public class PhyMLController extends NodeController {
 
     @Override
     protected List<Node> createNodes() {
+        
+        nodeInput.setLayoutProperties(BoxLayout.X_AXIS);
+        nodeInput.setLayoutGroups(BoxLayout.Y_AXIS);
+
+        nodeModel.setLayoutProperties(BoxLayout.X_AXIS);
+        nodeModel.setLayoutGroups(BoxLayout.Y_AXIS);
+
+        nodeTree.setLayoutProperties(BoxLayout.X_AXIS);
+        nodeTree.setLayoutGroups(BoxLayout.Y_AXIS);
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();
@@ -169,6 +179,8 @@ public class PhyMLController extends NodeController {
         state = false;
         propStartingTree.setActive(state);
 
+
+
         //Search algo
         propTreeSearch.setOption(ComboBoxProperty.OPTION_CHOICES,"NNI;SPR;NNI+SPR");
         propTreeSearch.selectValue("SPR");
@@ -180,6 +192,12 @@ public class PhyMLController extends NodeController {
         propRandomStarts.selectValue("5");
         state = true;
         propRandomStarts.setActive(state);
+        state = true;
+        propRandomStartsYesNo.setActive(state);
+        propRandomStartsYesNo.setOption(RadioButtonProperty.OPTION_1, "Yes");
+        propRandomStartsYesNo.setOption(RadioButtonProperty.OPTION_2, "No");
+        propRandomStartsYesNo.selectValue("No");
+
 
 
         //Optimize tree
@@ -396,7 +414,7 @@ public class PhyMLController extends NodeController {
 
 
         // Starting tree
-        if("Tree searching".equals(node.getId()) && "Source".equals(property.getLabel()))
+        if("Tree searching".equals(node.getId()) && "Initial tree".equals(property.getLabel()))
             {
                 if("File".equals(property.getValue()))
                     {
@@ -416,12 +434,12 @@ public class PhyMLController extends NodeController {
                 if("NNI".equals(property.getValue()))
                     {
                         Boolean state = false;
-                        getProperty("Number of random starting trees").setActive(state);
+                        getProperty("# random starting trees").setActive(state);
                     }
                 else
                     {
                         Boolean state = true;
-                        getProperty("Number of random starting trees").setActive(state);
+                        getProperty("# random starting trees").setActive(state);
                     }
             }
 

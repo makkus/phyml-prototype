@@ -20,15 +20,15 @@ import java.util.Map;
  */
 public class Node {
 
-    public static int DEFAULT_LABEL_WIDTH = 150;
-
     protected static final Logger myLogger = LoggerFactory.getLogger(Node.class);
+    public static int DEFAULT_LABEL_WIDTH = 150;
     protected final String name;
     protected final String id;
     final private Map<String, AbstractProperty> properties = Maps.newLinkedHashMap();
     private NodeController controller;
     private int layoutGroups = BoxLayout.Y_AXIS;
-    private int layoutProperties = BoxLayout.Y_AXIS;
+    private int layoutAlignment = BoxLayout.Y_AXIS;
+    private double[] layoutWeights = new double[]{};
     private int labelWidth = DEFAULT_LABEL_WIDTH;
 
     public Node(String id) {
@@ -38,6 +38,14 @@ public class Node {
     public Node(String id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public double[] getLayoutWeights() {
+        return layoutWeights;
+    }
+
+    public void setLayoutWeights(double[] layoutWeights) {
+        this.layoutWeights = layoutWeights;
     }
 
     public int getLabelWidth() {
@@ -56,12 +64,12 @@ public class Node {
         this.layoutGroups = layoutGroups;
     }
 
-    public int getLayoutProperties() {
-        return layoutProperties;
+    public int getLayoutAlignment() {
+        return layoutAlignment;
     }
 
-    public void setLayoutProperties(int layoutProperties) {
-        this.layoutProperties = layoutProperties;
+    public void setLayoutAlignment(int layoutAlignment) {
+        this.layoutAlignment = layoutAlignment;
     }
 
     public String getName() {

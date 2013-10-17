@@ -1,14 +1,11 @@
 package phyml.gui.control;
 
-import javax.swing.*;
-
 import com.google.common.collect.Lists;
-import phyml.gui.model.*;
-import phyml.gui.view.ComboBoxProperty;
-import phyml.gui.view.FilePathProperty;
-import phyml.gui.view.RadioButtonProperty;
-import phyml.gui.view.TextFieldProperty;
+import phyml.gui.model.AbstractProperty;
+import phyml.gui.model.Node;
+import phyml.gui.view.*;
 
+import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
@@ -45,7 +42,9 @@ public class PhyMLController extends NodeController {
     private final AbstractProperty propAlignment = new FilePathProperty(nodeInput, "Alignment file","_input");
     private final AbstractProperty propAlignmentYesNo = new RadioButtonProperty(nodeInput,null,"_input");
     private final AbstractProperty propDataType = new RadioButtonProperty(nodeInput, "Data type","_datatype");
+    private final AbstractProperty fillerDataType = new DummyProperty(nodeInput, "_filler_datatype", null, "_datatype");
     private final AbstractProperty propFormat = new RadioButtonProperty(nodeInput, "Format","_format");
+    private final AbstractProperty fillerFormat= new DummyProperty(nodeInput, "_filler_format", null, "_format");
 
     private final Node nodeModel = new Node("Substitution model");
     private final String choicesSubstModels = "Dayhoff;LG;WAG;JTT";
@@ -54,6 +53,7 @@ public class PhyMLController extends NodeController {
     private final AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeModel,"TsTvEstFix",null,"_Ts/Tv");
 
     private final AbstractProperty propRASmodel = new RadioButtonProperty(nodeModel,"Rate across sites","_Rate across sites");
+    private final AbstractProperty dummyProp1 = new DummyProperty(nodeModel, "dummy1", null, "_Rate across sites");
     private final AbstractProperty propRASnclasses = new SpinnerProperty(nodeModel, "Number of classes","_Nclasses");
     private final AbstractProperty propGammaVal = new TextFieldProperty(nodeModel, "Gamma shape parameter","_Gamma");
     private final AbstractProperty propGammaYesNo = new RadioButtonProperty(nodeModel,"GammaEstFix",null,"_Gamma");
@@ -70,7 +70,7 @@ public class PhyMLController extends NodeController {
     private final AbstractProperty propOptLens = new RadioButtonProperty(nodeTree, "Optimize edge lengths","__Opt");
 
 
-    
+
     private final Node nodeEdgeSupport = new Node("Branch support");
     private final AbstractProperty propBootstrapYesNo = new RadioButtonProperty(nodeEdgeSupport, "Bootstrap");
     private final AbstractProperty propBootstrapRepeats = new TextFieldProperty(nodeEdgeSupport, "Number of bootstrap iterations");
@@ -83,14 +83,16 @@ public class PhyMLController extends NodeController {
 
     @Override
     protected List<Node> createNodes() {
-        
-        nodeInput.setLayoutProperties(BoxLayout.X_AXIS);
+
+        nodeInput.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeInput.setLayoutGroups(BoxLayout.Y_AXIS);
+        nodeInput.setLayoutWeights(new double[]{0.7, 0.3});
 
-        nodeModel.setLayoutProperties(BoxLayout.X_AXIS);
+        nodeModel.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeModel.setLayoutGroups(BoxLayout.Y_AXIS);
+        nodeModel.setLayoutWeights(new double[]{0.7, 0.3});
 
-        nodeTree.setLayoutProperties(BoxLayout.X_AXIS);
+        nodeTree.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeTree.setLayoutGroups(BoxLayout.Y_AXIS);
 
         // adding all nodes to list for creation

@@ -57,6 +57,7 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
             panel.setLayout(layout);
 
             JLabel label = new JLabel(p.getLabel());
+            label.setToolTipText(p.getLabel());
             label.setHorizontalAlignment(SwingConstants.LEFT);
             panel.add(p.getComponent(), "2, 2");
 
@@ -104,7 +105,7 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
 
             for (String group : groups.keySet()) {
 
-                JPanel panel_tmp = assembleGroup(group, groups.get(group), node.getLayoutProperties(), node.getLabelWidth());
+                JPanel panel_tmp = assembleGroup(group, groups.get(group), node.getLayoutAlignment(), node.getLabelWidth(), node.getLayoutWeights());
 
                 panel.add(panel_tmp);
 
@@ -115,37 +116,62 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         return panel;
     }
 
-    protected static JPanel assembleGroup(String group, Collection<AbstractProperty> properties, int layoutProperties, int labelWidth) {
+    protected static JPanel assembleGroup(String group, Collection<AbstractProperty> properties, int layoutAlignment, int labelWidth, double[] layoutWeigths) {
 
         JPanel panel_tmp = new JPanel();
         if (!AbstractProperty.DEFAULT_GROUP_NAME.equals(group) && !group.startsWith("_")) {
             panel_tmp.setBorder(new TitledBorder(group));
         }
 
-        List<ColumnSpec> cs = Lists.newLinkedList();
+        if (layoutAlignment == BoxLayout.X_AXIS) {
+            List<ColumnSpec> cs = Lists.newLinkedList();
+            int i = 0;
+            int i_max = 0;
+            for (AbstractProperty prop : properties) {
 
-        for (AbstractProperty prop : properties) {
+                double layoutWeight = -1;
+                if (layoutWeigths.length - 1 >= i) {
+                    layoutWeight = layoutWeigths[i];
+                }
+                i = i + 1;
+                if (i > i_max) {
+                    i_max = i;
+                }
+                String layoutHint = "grow";
+                if (layoutWeight > 0) {
+                    layoutHint = "grow(" + layoutWeight + ")";
+                }
 
+                cs.add(FormSpecs.RELATED_GAP_COLSPEC);
+                cs.add(ColumnSpec.decode("0:" + layoutHint));
+
+            }
             cs.add(FormSpecs.RELATED_GAP_COLSPEC);
-            cs.add(ColumnSpec.decode("pref"));
 
-        }
-        cs.add(FormSpecs.RELATED_GAP_COLSPEC);
+            RowSpec[] rs = new RowSpec[]{
+                    FormSpecs.RELATED_GAP_ROWSPEC,
+                    RowSpec.decode("pref"),
+                    FormSpecs.RELATED_GAP_ROWSPEC
+            };
 
-        RowSpec[] rs = new RowSpec[]{
-                FormSpecs.RELATED_GAP_ROWSPEC,
-                RowSpec.decode("pref"),
-                FormSpecs.RELATED_GAP_ROWSPEC
-        };
+            FormLayout layout = new FormLayout(cs.toArray(new ColumnSpec[]{}), rs);
+            panel_tmp.setLayout(layout);
 
-        FormLayout layout = new FormLayout(cs.toArray(new ColumnSpec[]{}), rs);
-        panel_tmp.setLayout(layout);
+            int j = 2;
+            for (AbstractProperty prop : properties) {
+                JPanel temp = assembleProperty(prop, labelWidth);
+                panel_tmp.add(temp, j + ", 2");
+                j = j + 2;
+            }
+        } else {
 
-        int i = 2;
-        for (AbstractProperty prop : properties) {
-            JPanel temp = assembleProperty(prop, labelWidth);
-            panel_tmp.add(temp, i+", 2");
-            i = i + 2;
+            panel_tmp.setLayout(new BoxLayout(panel_tmp, BoxLayout.Y_AXIS));
+
+            for (AbstractProperty prop : properties) {
+                JPanel temp = assembleProperty(prop, labelWidth);
+                panel_tmp.add(temp);
+            }
+
         }
 
         return panel_tmp;

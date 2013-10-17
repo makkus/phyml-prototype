@@ -96,7 +96,7 @@ public class ExampleController extends NodeController {
         // 2 groups
         node_radiobutton.setLayoutGroups(BoxLayout.X_AXIS);
 
-        node_groups.setLayoutProperties(BoxLayout.X_AXIS);
+        node_groups.setLayoutAlignment(BoxLayout.X_AXIS);
 
         node_groups.setLayoutGroups(BoxLayout.Y_AXIS);
 

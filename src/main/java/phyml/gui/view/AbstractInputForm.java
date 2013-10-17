@@ -7,6 +7,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
+import org.apache.commons.lang.StringUtils;
 import phyml.gui.model.AbstractProperty;
 import phyml.gui.model.Node;
 
@@ -28,35 +29,60 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
     }
 
     private static JPanel assembleProperty(AbstractProperty p) {
+        return assembleProperty(p, Node.DEFAULT_LABEL_WIDTH);
+    }
+
+    private static JPanel assembleProperty(AbstractProperty p, int labelWidth) {
+
+        String labelText = p.getLabel();
 
         JPanel panel = new JPanel();
-//        panel.setMinimumSize(new Dimension(400, 32));
-//        panel.setMaximumSize(new Dimension(400, 32));
-//        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-//        panel.setLayout(new HorizontalLayout());
-//        HorizontalLayout layout = new HorizontalLayout();
-//        layout.setGap(10);
 
-        ColumnSpec[] cs = new ColumnSpec[]{
-                FormSpecs.RELATED_GAP_COLSPEC,
-                //ColumnSpec.decode("right:pref"),
-                ColumnSpec.decode("right:100px"),
-                FormSpecs.RELATED_GAP_COLSPEC,
-                ColumnSpec.decode("pref:grow"),
-                FormSpecs.RELATED_GAP_COLSPEC
-        };
-        RowSpec[] rs = new RowSpec[]{
-                FormSpecs.RELATED_GAP_ROWSPEC,
-                RowSpec.decode("pref"),
-                FormSpecs.RELATED_GAP_ROWSPEC
-        };
+        if (StringUtils.isEmpty(labelText)) {
+
+            ColumnSpec[] cs = new ColumnSpec[]{
+                    FormSpecs.RELATED_GAP_COLSPEC,
+                    ColumnSpec.decode("pref:grow"),
+                    FormSpecs.RELATED_GAP_COLSPEC
+            };
+            RowSpec[] rs = new RowSpec[]{
+                    FormSpecs.RELATED_GAP_ROWSPEC,
+                    RowSpec.decode("pref"),
+                    FormSpecs.RELATED_GAP_ROWSPEC
+            };
 //
-        FormLayout layout = new FormLayout(cs, rs);
-        panel.setLayout(layout);
+            FormLayout layout = new FormLayout(cs, rs);
+            panel.setLayout(layout);
 
-        panel.add(new JLabel(p.getLabel()), "2, 2");
-        panel.add(p.getComponent(), "4, 2");
-//        panel.add(p.getComponent());
+            JLabel label = new JLabel(p.getLabel());
+            label.setHorizontalAlignment(SwingConstants.LEFT);
+            panel.add(p.getComponent(), "2, 2");
+
+
+        } else {
+
+            ColumnSpec[] cs = new ColumnSpec[]{
+                    FormSpecs.RELATED_GAP_COLSPEC,
+                    ColumnSpec.decode("left:" + labelWidth + "px"),
+                    FormSpecs.RELATED_GAP_COLSPEC,
+                    ColumnSpec.decode("pref:grow"),
+                    FormSpecs.RELATED_GAP_COLSPEC
+            };
+            RowSpec[] rs = new RowSpec[]{
+                    FormSpecs.RELATED_GAP_ROWSPEC,
+                    RowSpec.decode("pref"),
+                    FormSpecs.RELATED_GAP_ROWSPEC
+            };
+//
+            FormLayout layout = new FormLayout(cs, rs);
+            panel.setLayout(layout);
+
+            JLabel label = new JLabel(p.getLabel());
+            label.setHorizontalAlignment(SwingConstants.LEFT);
+            panel.add(label, "2, 2");
+            panel.add(p.getComponent(), "4, 2");
+
+        }
 
         return panel;
     }
@@ -69,20 +95,6 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         // dont split into groups if only one group exists
         if (groups.keySet().size() == 0) {
             throw new RuntimeException("No groups/properties, can't assemble node.");
-//        } else if (groups.keySet().size() == 1) {
-//
-//            // create the panel that contains all properties using BoxLayout
-//            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-//            JSeparator sep = null;
-//
-//            for (String name : node.getProperties().keySet()) {
-//                JPanel temp = assembleProperty(node.getProperties().get(name));
-//                panel.add(temp);
-//                sep = new JSeparator();
-//                panel.add(sep);
-//            }
-//            // remove last separator
-//            panel.remove(sep);
         } else {
 
             // create the panel that contains all properties using BoxLayout
@@ -91,13 +103,13 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
             for (String group : groups.keySet()) {
 
                 JPanel panel_tmp = new JPanel();
-                if ( ! AbstractProperty.DEFAULT_GROUP_NAME.equals(group) ) {
+                if (!AbstractProperty.DEFAULT_GROUP_NAME.equals(group) && !group.startsWith("_")) {
                     panel_tmp.setBorder(new TitledBorder(group));
                 }
                 panel_tmp.setLayout(new BoxLayout(panel_tmp, node.getLayoutProperties()));
 
                 for (AbstractProperty prop : groups.get(group)) {
-                    JPanel temp = assembleProperty(prop);
+                    JPanel temp = assembleProperty(prop, node.getLabelWidth());
                     panel_tmp.add(temp);
                 }
 

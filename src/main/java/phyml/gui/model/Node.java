@@ -20,6 +20,8 @@ import java.util.Map;
  */
 public class Node {
 
+    public static int DEFAULT_LABEL_WIDTH = 150;
+
     protected static final Logger myLogger = LoggerFactory.getLogger(Node.class);
     protected final String name;
     protected final String id;
@@ -27,6 +29,7 @@ public class Node {
     private NodeController controller;
     private int layoutGroups = BoxLayout.Y_AXIS;
     private int layoutProperties = BoxLayout.Y_AXIS;
+    private int labelWidth = DEFAULT_LABEL_WIDTH;
 
     public Node(String id) {
         this(id, id);
@@ -35,6 +38,14 @@ public class Node {
     public Node(String id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public int getLabelWidth() {
+        return labelWidth;
+    }
+
+    public void setLabelWidth(int labelWidth) {
+        this.labelWidth = labelWidth;
     }
 
     public int getLayoutGroups() {

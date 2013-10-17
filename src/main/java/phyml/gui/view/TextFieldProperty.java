@@ -34,7 +34,7 @@ public class TextFieldProperty extends AbstractProperty {
     }
 
     public TextFieldProperty(Node parent, String id, String label, String group) {
-        super(parent, label, group);
+        super(parent, id, label, group);
     }
     public TextFieldProperty(Node parent, String id) {
         this(parent, id, null);

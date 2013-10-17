@@ -2,6 +2,7 @@ package phyml.gui.view;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
@@ -14,6 +15,7 @@ import phyml.gui.model.Node;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Project: grisu
@@ -102,16 +104,7 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
 
             for (String group : groups.keySet()) {
 
-                JPanel panel_tmp = new JPanel();
-                if (!AbstractProperty.DEFAULT_GROUP_NAME.equals(group) && !group.startsWith("_")) {
-                    panel_tmp.setBorder(new TitledBorder(group));
-                }
-                panel_tmp.setLayout(new BoxLayout(panel_tmp, node.getLayoutProperties()));
-
-                for (AbstractProperty prop : groups.get(group)) {
-                    JPanel temp = assembleProperty(prop, node.getLabelWidth());
-                    panel_tmp.add(temp);
-                }
+                JPanel panel_tmp = assembleGroup(group, groups.get(group), node.getLayoutProperties(), node.getLabelWidth());
 
                 panel.add(panel_tmp);
 
@@ -120,6 +113,42 @@ public abstract class AbstractInputForm extends JPanel implements InputFormPanel
         }
 
         return panel;
+    }
+
+    protected static JPanel assembleGroup(String group, Collection<AbstractProperty> properties, int layoutProperties, int labelWidth) {
+
+        JPanel panel_tmp = new JPanel();
+        if (!AbstractProperty.DEFAULT_GROUP_NAME.equals(group) && !group.startsWith("_")) {
+            panel_tmp.setBorder(new TitledBorder(group));
+        }
+
+        List<ColumnSpec> cs = Lists.newLinkedList();
+
+        for (AbstractProperty prop : properties) {
+
+            cs.add(FormSpecs.RELATED_GAP_COLSPEC);
+            cs.add(ColumnSpec.decode("pref"));
+
+        }
+        cs.add(FormSpecs.RELATED_GAP_COLSPEC);
+
+        RowSpec[] rs = new RowSpec[]{
+                FormSpecs.RELATED_GAP_ROWSPEC,
+                RowSpec.decode("pref"),
+                FormSpecs.RELATED_GAP_ROWSPEC
+        };
+
+        FormLayout layout = new FormLayout(cs.toArray(new ColumnSpec[]{}), rs);
+        panel_tmp.setLayout(layout);
+
+        int i = 2;
+        for (AbstractProperty prop : properties) {
+            JPanel temp = assembleProperty(prop, labelWidth);
+            panel_tmp.add(temp, i+", 2");
+            i = i + 2;
+        }
+
+        return panel_tmp;
     }
 
     protected static Multimap<String, AbstractProperty> getPropertyGroups(Collection<AbstractProperty> properties) {

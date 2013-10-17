@@ -48,13 +48,15 @@ public class PhyMLController extends NodeController {
 
     private final Node nodeModel = new Node("Substitution model");
     private final String choicesSubstModels = "Dayhoff;LG;WAG;JTT";
-    private final AbstractProperty propSubstModels = new ComboBoxProperty(nodeModel, "Substitution models");
+    private final AbstractProperty propSubstModels = new ComboBoxProperty(nodeModel, "Substitution models","_Substitution models");
+    private final AbstractProperty dummyPropSubstModels = new DummyProperty(nodeModel, "dummyPropSubstModels", null,"_Substitution models");
     private final AbstractProperty propTsTvVal = new TextFieldProperty(nodeModel,"Ts/tv value","_Ts/Tv");
     private final AbstractProperty propTsTvYesNo = new RadioButtonProperty(nodeModel,"TsTvEstFix",null,"_Ts/Tv");
 
     private final AbstractProperty propRASmodel = new RadioButtonProperty(nodeModel,"Rate across sites","_Rate across sites");
     private final AbstractProperty dummyProp1 = new DummyProperty(nodeModel, "dummy1", null, "_Rate across sites");
     private final AbstractProperty propRASnclasses = new SpinnerProperty(nodeModel, "Number of classes","_Nclasses");
+    private final AbstractProperty dummyProp2 = new DummyProperty(nodeModel, "dummy2", null, "_Nclasses");
     private final AbstractProperty propGammaVal = new TextFieldProperty(nodeModel, "Gamma shape parameter","_Gamma");
     private final AbstractProperty propGammaYesNo = new RadioButtonProperty(nodeModel,"GammaEstFix",null,"_Gamma");
     private final AbstractProperty propInvVal = new TextFieldProperty(nodeModel, "Proportion of invariants","_Invariants");
@@ -64,17 +66,20 @@ public class PhyMLController extends NodeController {
     private final AbstractProperty propStartingTreeYesNo = new ComboBoxProperty(nodeTree, "Initial tree","_StartTree");
     private final AbstractProperty propStartingTree = new FilePathProperty(nodeTree, "Starting tree",null,"_StartTree");
     private final AbstractProperty propTreeSearch = new ComboBoxProperty(nodeTree, "Tree search method","__Search");
-    private final AbstractProperty propRandomStartsYesNo = new RadioButtonProperty(nodeTree, "Random starting trees","__RandomStart");
-    private final AbstractProperty propRandomStarts = new TextFieldProperty(nodeTree, "# random starting trees","__RandomStart");
+    private final AbstractProperty dummyProp3 = new DummyProperty(nodeTree, "dummy3", null, "__Search");
+    private final AbstractProperty propRandomStarts = new TextFieldProperty(nodeTree, "# random starts","__RandomStart");
+    private final AbstractProperty propRandomStartsYesNo = new RadioButtonProperty(nodeTree, "Random starts","__RandomStart");
     private final AbstractProperty propOptTree = new RadioButtonProperty(nodeTree, "Optimize tree","__Opt");
     private final AbstractProperty propOptLens = new RadioButtonProperty(nodeTree, "Optimize edge lengths","__Opt");
 
 
 
     private final Node nodeEdgeSupport = new Node("Branch support");
-    private final AbstractProperty propBootstrapYesNo = new RadioButtonProperty(nodeEdgeSupport, "Bootstrap");
-    private final AbstractProperty propBootstrapRepeats = new TextFieldProperty(nodeEdgeSupport, "Number of bootstrap iterations");
-    private final AbstractProperty propFastSupport = new ComboBoxProperty(nodeEdgeSupport, "Fast branch support method");
+    private final AbstractProperty propBootstrapRepeats = new TextFieldProperty(nodeEdgeSupport, "Number of bootstrap iterations","_Bootstrap");
+    private final AbstractProperty propBootstrapYesNo = new RadioButtonProperty(nodeEdgeSupport, "Bootstrap","_Bootstrap");
+    private final AbstractProperty dummyPropBootstrap = new DummyProperty(nodeEdgeSupport, "dummyBootstrap", null, "__Bootstrap");
+    private final AbstractProperty propFastSupport = new ComboBoxProperty(nodeEdgeSupport, "Fast branch support method","_aLRT");
+    private final AbstractProperty dummyPropaLRT = new DummyProperty(nodeEdgeSupport, "dummyaLRT", null, "_aLRT");
 
 
     public PhyMLController() {
@@ -86,14 +91,20 @@ public class PhyMLController extends NodeController {
 
         nodeInput.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeInput.setLayoutGroups(BoxLayout.Y_AXIS);
-        nodeInput.setLayoutWeights(new double[]{0.7, 0.3});
+        nodeInput.setLayoutWeights(new double[]{0.8, 0.2});
 
         nodeModel.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeModel.setLayoutGroups(BoxLayout.Y_AXIS);
-        nodeModel.setLayoutWeights(new double[]{0.7, 0.3});
+        nodeModel.setLayoutWeights(new double[]{0.8, 0.2});
 
         nodeTree.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeTree.setLayoutGroups(BoxLayout.Y_AXIS);
+        nodeTree.setLayoutWeights(new double[]{0.8, 0.2});
+
+        nodeEdgeSupport.setLayoutAlignment(BoxLayout.X_AXIS);
+        nodeEdgeSupport.setLayoutGroups(BoxLayout.Y_AXIS);
+        nodeEdgeSupport.setLayoutWeights(new double[]{0.8, 0.2});
+        
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();

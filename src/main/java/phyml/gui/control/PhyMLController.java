@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class PhyMLController extends NodeController {
 
+
     public static void main(String[] args) {
 
         // create a controller
@@ -67,24 +68,24 @@ public class PhyMLController extends NodeController {
     private final AbstractProperty propStartingTree = new FilePathProperty(nodeTree, "Starting tree",null,"_StartTree");
     private final AbstractProperty propTreeSearch = new ComboBoxProperty(nodeTree, "Tree search method","__Search");
     private final AbstractProperty dummyProp3 = new DummyProperty(nodeTree, "dummy3", null, "__Search");
-    private final AbstractProperty propRandomStarts = new TextFieldProperty(nodeTree, "# random starts","__RandomStart");
-    private final AbstractProperty propRandomStartsYesNo = new RadioButtonProperty(nodeTree, "Random starts","__RandomStart");
+    private final AbstractProperty propRandomStarts = new TextFieldProperty(nodeTree, "# of random starts","Random starts","__RandomStart");
+    private final AbstractProperty propRandomStartsYesNo = new RadioButtonProperty(nodeTree, "Random starts",null,"__RandomStart");
     private final AbstractProperty propOptTree = new RadioButtonProperty(nodeTree, "Optimize tree","__Opt");
     private final AbstractProperty propOptLens = new RadioButtonProperty(nodeTree, "Optimize edge lengths","__Opt");
 
 
 
     private final Node nodeEdgeSupport = new Node("Branch support");
-    private final AbstractProperty propBootstrapRepeats = new TextFieldProperty(nodeEdgeSupport, "Number of bootstrap iterations","_Bootstrap");
-    private final AbstractProperty propBootstrapYesNo = new RadioButtonProperty(nodeEdgeSupport, "Bootstrap","_Bootstrap");
+    private final AbstractProperty propBootstrapRepeats = new TextFieldProperty(nodeEdgeSupport, "# of bootstrap repeats","Bootstrap","_Bootstrap");
+    private final AbstractProperty propBootstrapYesNo = new RadioButtonProperty(nodeEdgeSupport, "Bootstrap",null,"_Bootstrap");
     private final AbstractProperty dummyPropBootstrap = new DummyProperty(nodeEdgeSupport, "dummyBootstrap", null, "__Bootstrap");
     private final AbstractProperty propFastSupport = new ComboBoxProperty(nodeEdgeSupport, "Fast branch support method","_aLRT");
     private final AbstractProperty dummyPropaLRT = new DummyProperty(nodeEdgeSupport, "dummyaLRT", null, "_aLRT");
 
 
-    public PhyMLController() {
-        Node.DEFAULT_LABEL_WIDTH = 200;
-    }
+    // public PhyMLController() {
+    //     Node.DEFAULT_LABEL_WIDTH = 500;
+    // }
 
     @Override
     protected List<Node> createNodes() {
@@ -92,18 +93,22 @@ public class PhyMLController extends NodeController {
         nodeInput.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeInput.setLayoutGroups(BoxLayout.Y_AXIS);
         nodeInput.setLayoutWeights(new double[]{0.8, 0.2});
+        nodeInput.setLabelWidth(300);
 
         nodeModel.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeModel.setLayoutGroups(BoxLayout.Y_AXIS);
         nodeModel.setLayoutWeights(new double[]{0.8, 0.2});
+        nodeModel.setLabelWidth(300);
 
         nodeTree.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeTree.setLayoutGroups(BoxLayout.Y_AXIS);
         nodeTree.setLayoutWeights(new double[]{0.8, 0.2});
+        nodeTree.setLabelWidth(300);
 
         nodeEdgeSupport.setLayoutAlignment(BoxLayout.X_AXIS);
         nodeEdgeSupport.setLayoutGroups(BoxLayout.Y_AXIS);
         nodeEdgeSupport.setLayoutWeights(new double[]{0.8, 0.2});
+        nodeEdgeSupport.setLabelWidth(300);
         
 
         // adding all nodes to list for creation

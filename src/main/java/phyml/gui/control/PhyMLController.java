@@ -73,8 +73,6 @@ public class PhyMLController extends NodeController {
     private final AbstractProperty propOptTree = new RadioButtonProperty(nodeTree, "Optimize tree","__Opt");
     private final AbstractProperty propOptLens = new RadioButtonProperty(nodeTree, "Optimize edge lengths","__Opt");
 
-
-
     private final Node nodeEdgeSupport = new Node("Branch support");
     private final AbstractProperty propBootstrapRepeats = new TextFieldProperty(nodeEdgeSupport, "# of bootstrap repeats","Bootstrap","_Bootstrap");
     private final AbstractProperty propBootstrapYesNo = new RadioButtonProperty(nodeEdgeSupport, "Bootstrap",null,"_Bootstrap");
@@ -130,23 +128,25 @@ public class PhyMLController extends NodeController {
         propAlignmentYesNo.setOption(RadioButtonProperty.OPTION_1, "File");
         propAlignmentYesNo.setOption(RadioButtonProperty.OPTION_2, "Example");
         propAlignmentYesNo.selectValue("File");
+        propAlignmentYesNo.commandLabel="-i";
+
 
         //Data type
         propDataType.setOption(RadioButtonProperty.OPTION_1, "Amino-acids");
         propDataType.setOption(RadioButtonProperty.OPTION_2, "Nucleotides");
         propDataType.selectValue("Nucleotides");
-
-        System.out.println("propDataType:"+propDataType.getValue());
+        propDataType.commandLabel="-d nt";
+        
 
         //Format
         propFormat.setOption(RadioButtonProperty.OPTION_1, "Interleaved");
         propFormat.setOption(RadioButtonProperty.OPTION_2, "Sequential");
         propFormat.selectValue("Interleaved");
 
-
         // Substitution model
         propSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES, choicesSubstModels);
-        propSubstModels.selectValue("LG");
+        propSubstModels.selectValue("HKY85");
+        propSubstModels.commandLabel="-m HKY85";
 
 
 
@@ -159,16 +159,21 @@ public class PhyMLController extends NodeController {
         propTsTvYesNo.selectValue("estimated");
         state = true;
         propTsTvYesNo.setActive(state);
+        propTsTvYesNo.commandLabel="-t e";
+
 
         // RAS model
         propRASnclasses.setOption(SpinnerProperty.OPTION_MIN, "1");
         propRASnclasses.setOption(SpinnerProperty.OPTION_MAX, "10");
         propRASnclasses.setOption(SpinnerProperty.OPTION_STEP, "1");
         propRASnclasses.selectValue("4");
+        propRASnclasses.commandLabel="-c 4";
 
         propRASmodel.setOption(RadioButtonProperty.OPTION_1, "Discrete Gamma");
         propRASmodel.setOption(RadioButtonProperty.OPTION_2, "Free Rates");
         propRASmodel.selectValue("Free Rates");
+        propRASmodel.commandLabel="--freerates";
+        
 
         // Discrete Gamma model
         propGammaVal.selectValue("1.0");
@@ -198,12 +203,12 @@ public class PhyMLController extends NodeController {
         propStartingTree.setActive(state);
 
 
-
         //Search algo
         propTreeSearch.setOption(ComboBoxProperty.OPTION_CHOICES,"NNI;SPR;NNI+SPR");
         propTreeSearch.selectValue("SPR");
         state = true;
         propTreeSearch.setActive(state);
+        propTreeSearch.commandLabel="-s spr";
 
 
         //Random starting trees
@@ -215,6 +220,7 @@ public class PhyMLController extends NodeController {
         propRandomStartsYesNo.setOption(RadioButtonProperty.OPTION_1, "Yes");
         propRandomStartsYesNo.setOption(RadioButtonProperty.OPTION_2, "No");
         propRandomStartsYesNo.selectValue("No");
+        propRandomStartsYesNo.commandLabel="";
 
 
 
@@ -235,11 +241,13 @@ public class PhyMLController extends NodeController {
         propBootstrapRepeats.selectValue("100");
         state = false;
         propBootstrapRepeats.setActive(state);
+        propBootstrapYesNo.commandLabel="";
 
         propFastSupport.setOption(ComboBoxProperty.OPTION_CHOICES,"aLRT SH-like;aLRT Chi2-based;aBayes");
         propFastSupport.selectValue("aBayes");
         state = true;
         propFastSupport.setActive(state);
+        propFastSupport.commandLabel="";
 
     }
 
@@ -279,12 +287,22 @@ public class PhyMLController extends NodeController {
                         String choicesSubstModelsAA = "Dayhoff;LG;WAG;JTT";
                         propSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES,choicesSubstModelsAA);
                         propSubstModels.selectValue("LG");
+                        Boolean state = false;
+                        propTsTvVal.setActive(state);
+                        propTsTvYesNo.setActive(state);
+                        propTsTvYesNo.commandLabel="";
                     }
                 else
                     {
                         String choicesSubstModelsNT = "JC69;K80;F81;F84;HKY85;TN93;GTR";
                         propSubstModels.setOption(ComboBoxProperty.OPTION_CHOICES,choicesSubstModelsNT);
                         propSubstModels.selectValue("HKY85");
+                        Boolean state = true;
+                        propTsTvYesNo.setActive(state);
+                        propTsTvYesNo.selectValue("estimated");
+                        state = false;
+                        propTsTvVal.setActive(state);
+                        propTsTvYesNo.commandLabel="-t e";
                     }
             }
 
@@ -295,25 +313,11 @@ public class PhyMLController extends NodeController {
         // AbstractProperty currTsTvVal   = getProperty("Ts/tv value");
         // AbstractProperty currTsTvYesNo = getProperty("TstvEstFix");
 
-
-        if ("Data type".equals(idThatChanged))
+        if("Substitution models".equals(idThatChanged))
             {
-                if("Amino-acids".equals(property.getValue()))
-                    {
-                        Boolean state = false;
-                        propTsTvVal.setActive(state);
-                        propTsTvYesNo.setActive(state);
-                    }
-                else
-                    {
-                        Boolean state = true;
-                        propTsTvYesNo.setActive(state);
-                        propTsTvYesNo.selectValue("estimated");
-
-                        state = false;
-                        propTsTvVal.setActive(state);
-                    }
+                propSubstModels.commandLabel="-m "+propSubstModels.getValue();
             }
+
 
 
         if("TsTvEstFix".equals(idThatChanged))
@@ -483,6 +487,23 @@ public class PhyMLController extends NodeController {
                             }
                     }
             }
+        updateCommandLine();
+    }
+
+
+    protected void updateCommandLine() {
+        
+        commandLine="";
+        commandLine+=propAlignmentYesNo.commandLabel+" ";
+        commandLine+=propDataType.commandLabel+" ";
+        commandLine+=propSubstModels.commandLabel+" ";
+        commandLine+=propTsTvYesNo.commandLabel+" ";
+        commandLine+=propRASnclasses.commandLabel+" ";
+        commandLine+=propRASmodel.commandLabel+" ";
+        commandLine+=propTreeSearch.commandLabel+" ";
+        commandLine+=propRandomStartsYesNo.commandLabel+" ";
+
+        System.out.println(commandLine);
     }
 
 }

@@ -61,7 +61,8 @@ abstract public class NodeController {
     /**
      * Holds the current commandline.
      */
-    final protected LinkedList<String> commandline = Lists.newLinkedList();
+    // final protected LinkedList<String> commandline = Lists.newLinkedList();
+    public String commandLine;
 
     private boolean nodesCreated = false;
 
@@ -138,7 +139,7 @@ abstract public class NodeController {
         if ( nodesCreated ) {
             nodeChanged(node, property, event);
         }
-        eventBus.post(commandline);
+        // eventBus.post(commandline);
     }
 
     /**

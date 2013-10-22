@@ -155,12 +155,12 @@ public class ExampleController extends NodeController {
             }
 
             // the commandline changes here dont make any sense
-            commandline.clear();
-            commandline.addAll(Lists.newArrayList("--test " + prop_spinner.getValue()));
+            // commandline.clear();
+            // commandline.addAll(Lists.newArrayList("--test " + prop_spinner.getValue()));
         } else {
             myLogger.debug("Doing nothing.");
             // the commandline changes here dont make any sense
-            commandline.add("--"+event.getPropertyName()+event.getNewValue());
+            // commandline.add("--"+event.getPropertyName()+event.getNewValue());
         }
 
 

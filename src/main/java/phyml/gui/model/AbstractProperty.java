@@ -1,5 +1,6 @@
 package phyml.gui.model;
 
+import com.google.common.collect.Lists;
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
@@ -10,6 +11,8 @@ import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.util.Map;
 import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A class extending AbstractProperty is a value a user can change via the UI.
@@ -53,6 +56,8 @@ public abstract class AbstractProperty {
     public Node getParentNode() {
         return parent;
     }
+
+    public String commandLabel;
 
     abstract public JComponent getComponent();
 

@@ -122,7 +122,7 @@ abstract public class NodeController {
         for ( Node n : this.nodes ) {
             n.setController(this);
         }
-        setInitialValues();;
+        setInitialValues();
     }
 
     /**
@@ -173,7 +173,21 @@ abstract public class NodeController {
 
 
     public void executeCommand() {
-        ExternalCommand ec = new ExternalCommand(commandLine);
+        List<String> commandlineTemp = Lists.newArrayList("echo", "hello world");
+        //List<String> commandlineTemp = Lists.newArrayList("sleep", "10");
+        final ExternalCommand ec = new ExternalCommand(commandlineTemp);
+        //final ExternalCommand ec = new ExternalCommand(commandLine);
+
+        eventBus.post(ec);
+
+        Thread executeThread = new Thread(){
+            public void run() {
+                ec.execute();
+                System.out.println(StringUtils.join(ec.getStdout(), "\n"));
+            }
+        };
+        executeThread.start();
+
     }
 
 }

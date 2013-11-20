@@ -1,12 +1,13 @@
 package phyml.gui.control;
 
+import com.google.common.eventbus.Subscribe;
+import grisu.jcommons.processes.ExternalCommand;
 import grisu.jcommons.utils.swing.LogPanel;
 import org.apache.commons.lang.StringUtils;
-import phyml.gui.model.Node;
-import phyml.gui.view.*;
+import phyml.gui.view.ExternalCommandLogPanel;
+import phyml.gui.view.SubmitPanel;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 
 /**
  * This class assembles the Form according to the node list.
@@ -20,15 +21,12 @@ import javax.swing.border.TitledBorder;
  */
 public class FormCreator {
 
-    public static final int SIMPLE_LAYOUT = 1;
-    public static final int TABBED_LAYOUT = 2;
     public static final int COLLAPSIBLE_LAYOUT = 3;
     private final NodeController controller;
-    private final int layout;
-    private InputFormPanel inputFormPanel;
     private JTabbedPane tabbedPane;
-    private boolean displayDebug = false;
     private LogPanel logPanel;
+    private final int layout;
+    private SubmitPanel submitPanel;
 
     public FormCreator(NodeController nc) {
         this(nc, COLLAPSIBLE_LAYOUT);
@@ -37,6 +35,9 @@ public class FormCreator {
     public FormCreator(NodeController nc, int layout) {
         this.controller = nc;
         this.layout = layout;
+
+        NodeController.eventBus.register(this);
+
         nc.initializeNodes();
 
     }
@@ -82,8 +83,9 @@ public class FormCreator {
 
     }
 
+
     public void setDisplayDebug(boolean displayDebug) {
-        this.displayDebug = displayDebug;
+        getSubmitPanel().setDisplayDebug(displayDebug);
     }
 
     public void display() {
@@ -93,9 +95,7 @@ public class FormCreator {
                     JFrame frame = new JFrame("InputForm");
                     frame.setSize(800, 400);
 
-                    JScrollPane scrollPane = new JScrollPane(getForm().getPanel());
-                    addPane(controller.getTitle(), scrollPane);
-                    addPane("Log", getLogPanel());
+                    addPane(controller.getTitle(), getSubmitPanel());
 
                     frame.setContentPane(getTabbedPane());
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -126,37 +126,32 @@ public class FormCreator {
         return tabbedPane;
     }
 
-    public InputFormPanel getForm() {
-
-        if (inputFormPanel == null) {
-            switch (layout) {
-                case SIMPLE_LAYOUT:
-                    inputFormPanel = new InputFormPanelSimple();
-                    break;
-                case TABBED_LAYOUT:
-                    inputFormPanel = new InputFormPanelTabbed();
-                    break;
-                default:
-                    inputFormPanel = new InputFormPanelCollapsible();
-            }
-
-            if (displayDebug) {
-                JPanel cmd = new CommandlineDebugPanel();
-                cmd.setBorder(new TitledBorder("Current commandLine"));
-                inputFormPanel.getPanel().add(cmd);
-            }
-
-            for (Node n : controller.getNodes()) {
-                inputFormPanel.addNode(n);
-            }
-
+    public SubmitPanel getSubmitPanel() {
+        if ( submitPanel == null ) {
+            submitPanel = new SubmitPanel(controller, layout);
         }
-
-        return inputFormPanel;
+        return submitPanel;
     }
 
-    private JPanel assembleFormField(Node node) {
-        return null;
+    @Subscribe
+    public void newPhyMLRun(ExternalCommand ec) {
+        ExternalCommandLogPanel panel = new ExternalCommandLogPanel(ec);
+        addPane("Execution log", panel);
+        getTabbedPane().setSelectedComponent(panel);
     }
 
+    @Subscribe
+    public void phyMLRunPanelCanBeRemoved(final ExternalCommandLogPanel eclp) {
+        SwingUtilities.invokeLater(new Thread() {
+            public void run() {
+                removePane(eclp);
+                getTabbedPane().setSelectedComponent(getSubmitPanel());
+            }
+        });
+
+    }
+
+    public void removePane(JComponent c) {
+        getTabbedPane().remove(c);
+    }
 }

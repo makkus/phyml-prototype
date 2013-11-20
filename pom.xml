@@ -9,7 +9,7 @@
     <version>0.1-SNAPSHOT</version>
 
     <properties>
-        <grid-jcommons.version>2.12</grid-jcommons.version>
+        <grid-jcommons.version>2.13-SNAPSHOT</grid-jcommons.version>
     </properties>
 
 

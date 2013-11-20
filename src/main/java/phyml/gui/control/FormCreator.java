@@ -1,5 +1,6 @@
 package phyml.gui.control;
 
+import grisu.jcommons.utils.swing.LogPanel;
 import org.apache.commons.lang.StringUtils;
 import phyml.gui.model.Node;
 import phyml.gui.view.*;
@@ -25,7 +26,9 @@ public class FormCreator {
     private final NodeController controller;
     private final int layout;
     private InputFormPanel inputFormPanel;
+    private JTabbedPane tabbedPane;
     private boolean displayDebug = false;
+    private LogPanel logPanel;
 
     public FormCreator(NodeController nc) {
         this(nc, COLLAPSIBLE_LAYOUT);
@@ -89,8 +92,12 @@ public class FormCreator {
                 public void run() {
                     JFrame frame = new JFrame("InputForm");
                     frame.setSize(800, 400);
+
                     JScrollPane scrollPane = new JScrollPane(getForm().getPanel());
-                    frame.setContentPane(scrollPane);
+                    addPane(controller.getTitle(), scrollPane);
+                    addPane("Log", getLogPanel());
+
+                    frame.setContentPane(getTabbedPane());
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     //        frame.pack();
                     frame.setVisible(true);
@@ -99,6 +106,24 @@ public class FormCreator {
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+    }
+
+    private void addPane(String title, JComponent panel) {
+        getTabbedPane().add(title, panel);
+    }
+
+    public LogPanel getLogPanel() {
+        if ( logPanel == null ) {
+            logPanel = new LogPanel();
+        }
+        return logPanel;
+    }
+
+    public JTabbedPane getTabbedPane() {
+        if ( tabbedPane == null ) {
+            tabbedPane = new JTabbedPane();
+        }
+        return tabbedPane;
     }
 
     public InputFormPanel getForm() {
@@ -117,7 +142,7 @@ public class FormCreator {
 
             if (displayDebug) {
                 JPanel cmd = new CommandlineDebugPanel();
-                cmd.setBorder(new TitledBorder("Current commandline"));
+                cmd.setBorder(new TitledBorder("Current commandLine"));
                 inputFormPanel.getPanel().add(cmd);
             }
 

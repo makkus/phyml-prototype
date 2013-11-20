@@ -1,6 +1,7 @@
 package phyml.gui.control;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import phyml.gui.model.AbstractProperty;
 import phyml.gui.model.Node;
 import phyml.gui.view.*;
@@ -107,7 +108,7 @@ public class PhyMLController extends NodeController {
         nodeEdgeSupport.setLayoutGroups(BoxLayout.Y_AXIS);
         nodeEdgeSupport.setLayoutWeights(new double[]{0.8, 0.2});
         nodeEdgeSupport.setLabelWidth(300);
-        
+
 
         // adding all nodes to list for creation
         List<Node> nodes = Lists.newArrayList();
@@ -117,6 +118,11 @@ public class PhyMLController extends NodeController {
         nodes.add(nodeEdgeSupport);
 
         return nodes;
+    }
+
+    @Override
+    public String getTitle() {
+        return "PhyML";
     }
 
     @Override
@@ -136,7 +142,7 @@ public class PhyMLController extends NodeController {
         propDataType.setOption(RadioButtonProperty.OPTION_2, "Nucleotides");
         propDataType.selectValue("Nucleotides");
         propDataType.commandLabel="-d nt";
-        
+
 
         //Format
         propFormat.setOption(RadioButtonProperty.OPTION_1, "Interleaved");
@@ -173,7 +179,7 @@ public class PhyMLController extends NodeController {
         propRASmodel.setOption(RadioButtonProperty.OPTION_2, "Free Rates");
         propRASmodel.selectValue("Free Rates");
         propRASmodel.commandLabel="--freerates";
-        
+
 
         // Discrete Gamma model
         propGammaVal.selectValue("1.0");
@@ -492,18 +498,29 @@ public class PhyMLController extends NodeController {
 
 
     protected void updateCommandLine() {
-        
-        commandLine="";
-        commandLine+=propAlignmentYesNo.commandLabel+" ";
-        commandLine+=propDataType.commandLabel+" ";
-        commandLine+=propSubstModels.commandLabel+" ";
-        commandLine+=propTsTvYesNo.commandLabel+" ";
-        commandLine+=propRASnclasses.commandLabel+" ";
-        commandLine+=propRASmodel.commandLabel+" ";
-        commandLine+=propTreeSearch.commandLabel+" ";
-        commandLine+=propRandomStartsYesNo.commandLabel+" ";
 
-        System.out.println(commandLine);
+//        commandLine="";
+//        commandLine+=propAlignmentYesNo.commandLabel+" ";
+//        commandLine+=propDataType.commandLabel+" ";
+//        commandLine+=propSubstModels.commandLabel+" ";
+//        commandLine+=propTsTvYesNo.commandLabel+" ";
+//        commandLine+=propRASnclasses.commandLabel+" ";
+//        commandLine+=propRASmodel.commandLabel+" ";
+//        commandLine+=propTreeSearch.commandLabel+" ";
+//        commandLine+=propRandomStartsYesNo.commandLabel+" ";
+
+        commandLine.clear();
+        commandLine.add(propAlignmentYesNo.commandLabel);
+        commandLine.add(propDataType.commandLabel);
+        commandLine.add(propSubstModels.commandLabel);
+        commandLine.add(propTsTvYesNo.commandLabel);
+        commandLine.add(propRASnclasses.commandLabel);
+        commandLine.add(propRASmodel.commandLabel);
+        commandLine.add(propTreeSearch.commandLabel);
+        commandLine.add(propRandomStartsYesNo.commandLabel);
+
+
+        System.out.println(StringUtils.join(commandLine, " "));
     }
 
 }

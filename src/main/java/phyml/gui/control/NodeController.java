@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 import com.jgoodies.common.base.SystemUtils;
 import com.jgoodies.looks.Options;
+import grisu.jcommons.processes.ExternalCommand;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,10 +60,10 @@ abstract public class NodeController {
     private List<Node> nodes;
 
     /**
-     * Holds the current commandline.
+     * Holds the current commandLine.
      */
-    // final protected LinkedList<String> commandline = Lists.newLinkedList();
-    public String commandLine;
+    final protected LinkedList<String> commandLine = Lists.newLinkedList();
+//    public String commandLine;
 
     private boolean nodesCreated = false;
 
@@ -105,6 +106,13 @@ abstract public class NodeController {
      */
     abstract protected List<Node> createNodes();
 
+    /**
+     * Gets the title of this controller, usually the name of the application.
+     *
+     * @return the title
+     */
+    abstract public String getTitle();
+
     public void initializeNodes() {
 
         this.nodes = createNodes();
@@ -139,7 +147,7 @@ abstract public class NodeController {
         if ( nodesCreated ) {
             nodeChanged(node, property, event);
         }
-        // eventBus.post(commandline);
+        eventBus.post(commandLine);
     }
 
     /**
@@ -161,6 +169,11 @@ abstract public class NodeController {
             }
         }
         return null;
+    }
+
+
+    public void executeCommand() {
+        ExternalCommand ec = new ExternalCommand(commandLine);
     }
 
 }

@@ -111,6 +111,11 @@ public class ExampleController extends NodeController {
     }
 
     @Override
+    public String getTitle() {
+        return "Example";
+    }
+
+    @Override
     protected void setInitialValues() {
 
         prop_textfield.selectValue("exampleDefaultValue");
@@ -154,13 +159,13 @@ public class ExampleController extends NodeController {
                 prop_textfield.setActive(true);
             }
 
-            // the commandline changes here dont make any sense
-            // commandline.clear();
-            // commandline.addAll(Lists.newArrayList("--test " + prop_spinner.getValue()));
+            // the commandLine changes here dont make any sense
+            // commandLine.clear();
+            // commandLine.addAll(Lists.newArrayList("--test " + prop_spinner.getValue()));
         } else {
             myLogger.debug("Doing nothing.");
-            // the commandline changes here dont make any sense
-            // commandline.add("--"+event.getPropertyName()+event.getNewValue());
+            // the commandLine changes here dont make any sense
+            // commandLine.add("--"+event.getPropertyName()+event.getNewValue());
         }
 
 

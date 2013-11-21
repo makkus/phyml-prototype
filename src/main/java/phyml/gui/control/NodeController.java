@@ -14,6 +14,7 @@ import phyml.gui.model.Node;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -173,10 +174,17 @@ abstract public class NodeController {
 
 
     public void executeCommand() {
-        List<String> commandlineTemp = Lists.newArrayList("echo", "hello world");
-        //List<String> commandlineTemp = Lists.newArrayList("sleep", "10");
-        final ExternalCommand ec = new ExternalCommand(commandlineTemp);
+
+        //List<String> commandlineTemp = Lists.newArrayList("java", "-cp", "/home/markus/src/config/applications/Java/jobs/java_sleep/files/JavaSleep.jar", "nz.org.nesi.javaTestJob.JavaTestJob", "6", "1");
         //final ExternalCommand ec = new ExternalCommand(commandLine);
+        File binary = PhyMLBinary.phymlBinaryFile();
+        if ( binary == null ) {
+            throw new RuntimeException("Can't find PhyML binary.");
+        }
+        List<String> commandToRun = Lists.newArrayList(binary.getAbsolutePath());
+        commandToRun.addAll(commandLine);
+        //final ExternalCommand ec = new ExternalCommand(commandToRun);
+        final ExternalCommand ec = new ExternalCommand(commandToRun);
 
         eventBus.post(ec);
 

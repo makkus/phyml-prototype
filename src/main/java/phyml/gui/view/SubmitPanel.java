@@ -26,14 +26,15 @@ public class SubmitPanel extends JPanel {
     public static final int TABBED_LAYOUT = 2;
     private final int layout;
     private InputFormPanel inputFormPanel;
-    private boolean displayDebug = false;
+    private final boolean displayDebug;
     private final NodeController controller;
     private JButton submitButton;
 
-    public SubmitPanel(NodeController controller, int layout) {
+    public SubmitPanel(NodeController controller, int layout, boolean displayDebug) {
         super();
         this.controller = controller;
         this.layout = layout;
+        this.displayDebug = displayDebug;
 
         setLayout(new VerticalLayout());
         JScrollPane scrollPane = new JScrollPane(getForm().getPanel());
@@ -84,9 +85,6 @@ public class SubmitPanel extends JPanel {
         return inputFormPanel;
     }
 
-    public void setDisplayDebug(boolean displayDebug) {
-        this.displayDebug = displayDebug;
-    }
 
     private void submit() {
 
@@ -108,7 +106,7 @@ public class SubmitPanel extends JPanel {
 
     public JButton getSubmitButton() {
         if (submitButton == null) {
-            submitButton = new JButton("Submit");
+            submitButton = new JButton("Run PhyML");
             submitButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

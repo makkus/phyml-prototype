@@ -30,11 +30,9 @@ public class ExampleController extends NodeController {
         // create the GUI
         FormCreator fc = new FormCreator(exampleController);
 
-        fc.setDisplayDebug(true);
-
         // alternatively, you can use different layouts
-        //FormCreator fc = new FormCreator(exampleController, FormCreator.SIMPLE_LAYOUT);
-        //FormCreator fc = new FormCreator(exampleController, FormCreator.TABBED_LAYOUT);
+        //FormCreator fc = new FormCreator(exampleController, FormCreator.SIMPLE_LAYOUT, true);
+        //FormCreator fc = new FormCreator(exampleController, FormCreator.TABBED_LAYOUT, true);
 
         // display the gui
         fc.display();

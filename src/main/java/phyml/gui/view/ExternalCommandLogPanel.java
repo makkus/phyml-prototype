@@ -6,6 +6,7 @@ import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import grisu.jcommons.processes.ExternalCommand;
 import grisu.jcommons.utils.swing.LogPanel;
+import org.apache.commons.lang.StringUtils;
 import phyml.gui.control.NodeController;
 
 import javax.swing.*;
@@ -65,7 +66,8 @@ public class ExternalCommandLogPanel extends JPanel implements PropertyChangeLis
         buttonPanel.add(getCancelButton(), "2, 2");
         add(buttonPanel, "2, 4");
 
-
+        getLogPanel().addMessage("Executing:\n");
+        getLogPanel().addMessage(StringUtils.join(ec.getCommand(), " "));
     }
 
     private LogPanel getLogPanel() {
@@ -84,7 +86,7 @@ public class ExternalCommandLogPanel extends JPanel implements PropertyChangeLis
                     if ( "Ok".equals(cancelButton.getText())) {
                         NodeController.eventBus.post(ExternalCommandLogPanel.this);
                     } else {
-                        // cancel job
+                        command.cancel();
                     }
                 }
             });

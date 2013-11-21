@@ -27,14 +27,16 @@ public class FormCreator {
     private LogPanel logPanel;
     private final int layout;
     private SubmitPanel submitPanel;
+    private final boolean displayDebug;
 
     public FormCreator(NodeController nc) {
-        this(nc, COLLAPSIBLE_LAYOUT);
+        this(nc, COLLAPSIBLE_LAYOUT, false);
     }
 
-    public FormCreator(NodeController nc, int layout) {
+    public FormCreator(NodeController nc, int layout, boolean debug) {
         this.controller = nc;
         this.layout = layout;
+        this.displayDebug = debug;
 
         NodeController.eventBus.register(this);
 
@@ -75,25 +77,30 @@ public class FormCreator {
             System.exit(2);
         }
 
-        FormCreator fc = new FormCreator(controller, FormCreator.COLLAPSIBLE_LAYOUT);
-
-        fc.setDisplayDebug(debug);
+        FormCreator fc = new FormCreator(controller, FormCreator.COLLAPSIBLE_LAYOUT, debug);
 
         fc.display();
 
     }
 
 
-    public void setDisplayDebug(boolean displayDebug) {
-        getSubmitPanel().setDisplayDebug(displayDebug);
-    }
 
     public void display() {
         try {
             SwingUtilities.invokeAndWait(new Thread() {
                 public void run() {
-                    JFrame frame = new JFrame("InputForm");
+                    final JFrame frame = new JFrame("InputForm");
                     frame.setSize(800, 400);
+
+                    Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+                        @Override
+                        public void uncaughtException(Thread t, Throwable e) {
+
+                            JOptionPane.showMessageDialog(frame,
+                                    e.getLocalizedMessage(),     "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
 
                     addPane(controller.getTitle(), getSubmitPanel());
 
@@ -128,7 +135,7 @@ public class FormCreator {
 
     public SubmitPanel getSubmitPanel() {
         if ( submitPanel == null ) {
-            submitPanel = new SubmitPanel(controller, layout);
+            submitPanel = new SubmitPanel(controller, layout, displayDebug);
         }
         return submitPanel;
     }

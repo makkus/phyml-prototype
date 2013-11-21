@@ -37,8 +37,10 @@ public class SubmitPanel extends JPanel {
         this.displayDebug = displayDebug;
 
         setLayout(new VerticalLayout());
-        JScrollPane scrollPane = new JScrollPane(getForm().getPanel());
-        add(scrollPane);
+        add(getForm().getPanel());
+//        JScrollPane scrollPane = new JScrollPane(getForm().getPanel());
+//        add(scrollPane)
+// ;
         JPanel buttonPanel = new JPanel();
         ColumnSpec[] cs = new ColumnSpec[]{
                 FormSpecs.RELATED_GAP_COLSPEC,

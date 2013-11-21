@@ -29,6 +29,8 @@ public class FormCreator {
     private SubmitPanel submitPanel;
     private final boolean displayDebug;
 
+    private JScrollPane scrollPane = null;
+
     public FormCreator(NodeController nc) {
         this(nc, COLLAPSIBLE_LAYOUT, false);
     }
@@ -102,7 +104,8 @@ public class FormCreator {
                         }
                     });
 
-                    addPane(controller.getTitle(), getSubmitPanel());
+                    scrollPane = new JScrollPane(getSubmitPanel());
+                    addPane(controller.getTitle(), scrollPane);
 
                     frame.setContentPane(getTabbedPane());
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -152,7 +155,7 @@ public class FormCreator {
         SwingUtilities.invokeLater(new Thread() {
             public void run() {
                 removePane(eclp);
-                getTabbedPane().setSelectedComponent(getSubmitPanel());
+                getTabbedPane().setSelectedComponent(scrollPane);
             }
         });
 
